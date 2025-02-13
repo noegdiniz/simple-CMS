@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{home.nav_title}}</title>
+  <link rel="stylesheet" href="{{url_for('static',filename='css/index.css')}}">
+  <link rel="icon" href="{{url_for('static',filename='home.icon')}}" type="image/x-icon">
+</head>
+<body>
+  <header class="nav-bard-show">
+    <nav class="navbar">
+      <div class="navbar-brand">
+        <img src="{{url_for('static',filename='home.path')}}" alt="Logo" class="navbar-logo padding-sm">
+        {{home.nav_title}}
+      </div>
+      <div class="navbar-toggle" id="mobile-menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </div>
+      <ul class="navbar-menu">
+        <li class="navbar-item"><a href="#" class="navbar-link">Home</a></li>
+        <li class="navbar-item"><a href="#" class="navbar-link">Noticias</a></li>
+        <li class="navbar-item"><a href="#" class="navbar-link">Documentos</a></li>
+        <li class="navbar-item"><a href="#" class="navbar-link">Galeria</a></li>
+      </ul>
+    </nav>
+  </header>
+  
+  <main>    
+    <div class="logo-container navbar-menu">
+      <div class="text-center logo-background">
+        <div class="home-box menu_size">
+          <li class="navbar-item"><a href="#" class="navbar-link">Home</a></li>
+          <li class="navbar-item"><a href="#" class="navbar-link">Noticias</a></li>
+        </div>
+
+        <!-- Big Logo in Diamond Shape -->
+         <div class="menu_size text-center">
+           <div class="big-logo-container big-logo">
+             <img src="{{url_for('static',filename='home.path')}}" alt="Big Logo">
+           </div>
+         </div>
+
+        <div class="home-box menu_size">
+          <li class="navbar-item"><a href="#" class="navbar-link">Documentos</a></li>
+          <li class="navbar-item"><a href="#" class="navbar-link">Galeria</a></li>
+        </div>
+        
+        <h1>{{home.home_title}}</h1>
+      </div>
+    </div>
+    
+    <p class="text-primary">{{home.home_text}}</p>
+
+    <section class="gallery-section margin-top-sm">
+      <h2 class="text-center">Noticias</h2>
+      <!-- News Section -->
+      <div class="card margin-top-sm">
+        <h2 class="card-title">Teste1</h2>
+        <p class="card-body">texte example..................</p>
+        <button class="button margin-top-sm">Learn More</button>
+      </div>
+      <div class="card margin-top-sm">
+        <h2 class="card-title">teste2</h2>
+        <p class="card-body">texte example..................</p>
+        <button class="button margin-top-sm">Learn More</button>
+      </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="gallery-section margin-top-sm">
+      <h2 class="text-center">Galeria</h2>
+      <div class="gallery-grid">
+        <div class="gallery-item">
+          <img src="{{url_for('static',filename='images/gallery1.jpg')}}" alt="Gallery Image 1">
+          <p class="gallery-caption">Caption for Image 1</p>
+        </div>
+        <div class="gallery-item">
+          <img src="{{url_for('static',filename='images/gallery2.jpg')}}" alt="Gallery Image 2">
+          <p class="gallery-caption">Caption for Image 2</p>
+        </div>
+        <div class="gallery-item">
+          <img src="{{url_for('static',filename='images/gallery3.jpg')}}" alt="Gallery Image 3">
+          <p class="gallery-caption">Caption for Image 3</p>
+        </div>
+        <div class="gallery-item">
+          <img src="{{url_for('static',filename='images/gallery4.jpg')}}" alt="Gallery Image 4">
+          <p class="gallery-caption">Caption for Image 4</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3 class="footer-title">About Us</h3>
+        <p>We are a leading institution dedicated to excellence.</p>
+      </div>
+      <div class="footer-section">
+        <h3 class="footer-title">Quick Links</h3>
+        <ul>
+          <li><a href="#" class="footer-link">Home</a></li>
+          <li><a href="#" class="footer-link">News</a></li>
+          <li><a href="#" class="footer-link">Documents</a></li>
+          <li><a href="#" class="footer-link">Gallery</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3 class="footer-title">Contact Us</h3>
+        <p>Email: info@institution.com</p>
+        <p>Phone: +123 456 7890</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2023 Institutional Site. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="{{url_for('static',filename='js/script.js')}}" defer></script>
+</body>
+</html>
