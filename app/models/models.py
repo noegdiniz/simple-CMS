@@ -1,7 +1,6 @@
 from app.ext.db import db
 from datetime import datetime
-from flask_security import RoleMixin
-from flask_security import UserMixin
+from flask_security import RoleMixin, UserMixin, current_user
 from flask_admin import form
 
 import os
@@ -75,7 +74,6 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(255), unique=True)
     password = db.Column(db.String(255))
     active = db.Column(db.Boolean())
-    confirmed_at = db.Column(db.DateTime())
     created_at = db.Column(db.DateTime, default=datetime.today())
     updated_at = db.Column(db.DateTime, default=datetime.today(), onupdate=datetime.today())
     
@@ -98,14 +96,20 @@ class User(db.Model, UserMixin):
 class News(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(200), nullable=False)
-    content = db.Column(db.Text, nullable=False)
+    content = db.Column(db.Text)
+
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     created_at = db.Column(db.DateTime, default=datetime.today())
     updated_at = db.Column(db.DateTime, default=datetime.today(), onupdate=datetime.today())
-
+    
     author = db.relationship('User', backref=db.backref('news', lazy=True))
 
+
+    def format_brazilian_datetime(self, date_time):
+        """Formats a datetime object to Brazilian format (dd/mm/yyyy HH:MM:SS)."""
+        return date_time.strftime('%d/%m/%Y %H:%M:%S')
+    
     def __str__(self):
         return self.title
     

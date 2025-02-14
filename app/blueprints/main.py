@@ -8,8 +8,10 @@ main_bps = Blueprint("main_bps", __name__)
 @main_bps.route('/')
 def index():
     home = Home.query.all()
+    fotos = Galerie.query.all()
+    noticias = News.query.all()
 
-    return render_template('index.html', home=home)
+    return render_template('index.html', home=home, fotos=fotos, noticias=noticias)
 
 def galeria():
     galeria = Galerie.query.all()    

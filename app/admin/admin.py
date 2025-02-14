@@ -7,10 +7,23 @@ from app.login.login import security
 from flask_admin.contrib.sqla import ModelView
 from flask_admin import Admin, AdminIndexView, expose, form
 from markupsafe import Markup
+from app.ext import db
+from datetime import date
 
 from app.helpers.helpes import file_path_news, file_path_galeria, file_path_icons, file_path_docs
 from wtforms import fields
 from wtforms import widgets
+from flask_admin.model import typefmt
+
+
+
+def date_format(view, value):
+    return value.strftime('%d.%m.%Y %H:%M')
+    
+MY_DEFAULT_FORMATTERS = dict(typefmt.BASE_FORMATTERS)
+MY_DEFAULT_FORMATTERS.update({
+    date: date_format
+})
 
 # define a custom wtforms widget and field.
 # see https://wtforms.readthedocs.io/en/latest/widgets.html#custom-widgets
@@ -25,6 +38,20 @@ class CKTextAreaField(fields.TextAreaField):
     widget = CKTextAreaWidget()
 
 class RootModelView(ModelView):
+    column_type_formatters = MY_DEFAULT_FORMATTERS
+
+    @staticmethod
+    def _user_formatter(view, context, model, name):
+        if model.updated_at:
+           markupstring = "<a href='%s'>%s</a>" % (model.url, model.urltitle)
+           return Markup(markupstring)
+        else:
+           return ""
+
+    column_formatters = {
+        'url': _user_formatter
+    }
+
     def _handle_view(self, name, **kwargs):
         """
         Override builtin _handle_view in order to redirect users when a view is not
@@ -65,6 +92,7 @@ class UserAdmin(RootModelView):
     column_list = ['username','email','active', 'roles']
     form_columns = ['username', 'email', 'active', 'roles']
 
+    
     def is_accessible(self):
         return current_user.is_authenticated and current_user.has_permission('can_view_user')
     
@@ -96,6 +124,11 @@ class NewsAdmin(RootModelView):
     def can_delete(self):
         return current_user.has_permission('can_delete_news')
 
+    def on_model_change(self, form, model, is_created):
+        if current_user.is_authenticated:
+            model.author_id = current_user.id
+        super().on_model_change(form, model, is_created)
+
 class GallerieAdmin(RootModelView):
     form_columns = ['title', 'description', 'path']
 
@@ -118,6 +151,11 @@ class GallerieAdmin(RootModelView):
             "Image", base_path=file_path_galeria, thumbnail_size=(100, 100, True)
         )
     }
+
+    def on_model_change(self, form, model, is_created):
+        if current_user.is_authenticated:
+            model.author_id = current_user.id
+        super().on_model_change(form, model, is_created)
 
     def is_accessible(self):
         return current_user.is_authenticated and current_user.has_permission('can_view_gallerie')
@@ -154,6 +192,11 @@ class DocsAdmin(RootModelView):
     def can_delete(self):
         return current_user.has_permission('can_delete_docs')
 
+    def on_model_change(self, form, model, is_created):
+        if current_user.is_authenticated:
+            model.author_id = current_user.id
+        super().on_model_change(form, model, is_created)
+        
 class DocsTypesAdmin(RootModelView):
     form_columns = ['name', 'description']
 

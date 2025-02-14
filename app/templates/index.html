@@ -57,38 +57,29 @@
     <section class="gallery-section margin-top-sm">
       <h2 class="text-center">Noticias</h2>
       <!-- News Section -->
+       {%for noticia in noticias%}
       <div class="card margin-top-sm">
-        <h2 class="card-title">Teste1</h2>
-        <p class="card-body">texte example..................</p>
-        <button class="button margin-top-sm">Learn More</button>
+        <h2 class="card-title">{{noticia.title}}</h2>
+        
+        <p class="date-time">{{noticia.created_at.strftime('%d.%m.%Y %H:%M')}}</p>
+        <button class="button margin-top-sm">Ler mais</button>
       </div>
-      <div class="card margin-top-sm">
-        <h2 class="card-title">teste2</h2>
-        <p class="card-body">texte example..................</p>
-        <button class="button margin-top-sm">Learn More</button>
-      </div>
+      {%endfor%}
     </section>
 
     <!-- Gallery Section -->
     <section class="gallery-section margin-top-sm">
       <h2 class="text-center">Galeria</h2>
       <div class="gallery-grid">
+        {%for foto in fotos%}
         <div class="gallery-item">
-          <img src="{{url_for('static',filename='images/gallery1.jpg')}}" alt="Gallery Image 1">
-          <p class="gallery-caption">Caption for Image 1</p>
+          <img src="{{url_for('static',filename='galeria.path')}}" alt="Gallery Image 1">
+          <p class="gallery-caption">{{galeria.title}}</p>
+          <p class="gallery-caption">{{galeria.description}}</p>
+
+          <p class="date-time">{{galeria.created_at.strftime('%d.%m.%Y %H:%M')}}</p>
         </div>
-        <div class="gallery-item">
-          <img src="{{url_for('static',filename='images/gallery2.jpg')}}" alt="Gallery Image 2">
-          <p class="gallery-caption">Caption for Image 2</p>
-        </div>
-        <div class="gallery-item">
-          <img src="{{url_for('static',filename='images/gallery3.jpg')}}" alt="Gallery Image 3">
-          <p class="gallery-caption">Caption for Image 3</p>
-        </div>
-        <div class="gallery-item">
-          <img src="{{url_for('static',filename='images/gallery4.jpg')}}" alt="Gallery Image 4">
-          <p class="gallery-caption">Caption for Image 4</p>
-        </div>
+        {%endfor%}
       </div>
     </section>
   </main>
