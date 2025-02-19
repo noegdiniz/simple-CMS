@@ -9,10 +9,9 @@
 </head>
 <body>
   <header class="nav-bard-show">
-    <nav class="navbar">
+    <nav class="navbar logo-background">
       <div class="navbar-brand">
-        <img src="{{url_for('static',filename='home.path')}}" alt="Logo" class="navbar-logo padding-sm">
-        {{home.nav_title}}
+        <img src="{{url_for('static',filename=home.path)}}" alt="Logo" class="navbar-logo padding-sm">
       </div>
       <div class="navbar-toggle" id="mobile-menu">
         <span class="bar"></span>
@@ -29,7 +28,7 @@
   </header>
   
   <main>    
-    <div class="logo-container navbar-menu">
+    <div class="logo-container navbar-menu background-image">
       <div class="text-center logo-background">
         <div class="home-box menu_size">
           <li class="navbar-item"><a href="#" class="navbar-link">Home</a></li>
@@ -39,7 +38,7 @@
         <!-- Big Logo in Diamond Shape -->
          <div class="menu_size text-center">
            <div class="big-logo-container big-logo">
-             <img src="{{url_for('static',filename='home.path')}}" alt="Big Logo">
+             <img src="{{url_for('static',filename=home.path)}}" alt="Big Logo">
            </div>
          </div>
 
@@ -61,7 +60,7 @@
       <div class="card margin-top-sm">
         <h2 class="card-title">{{noticia.title}}</h2>
         
-        <p class="date-time">{{noticia.created_at.strftime('%d.%m.%Y %H:%M')}}</p>
+        <p class="date-time">Data: {{noticia.created_at.strftime('%d/%m/%Y %H:%M')}}</p>
         <button class="button margin-top-sm">Ler mais</button>
       </div>
       {%endfor%}
@@ -77,7 +76,7 @@
           <p class="gallery-caption">{{galeria.title}}</p>
           <p class="gallery-caption">{{galeria.description}}</p>
 
-          <p class="date-time">{{galeria.created_at.strftime('%d.%m.%Y %H:%M')}}</p>
+          <p class="date-time">{{galeria.created_at.strftime('%d/%m/%Y %H:%M')}}</p>
         </div>
         {%endfor%}
       </div>
@@ -106,10 +105,10 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>&copy; 2023 Institutional Site. All rights reserved.</p>
+      <p>&copy; 2025 Institutional Site. All rights reserved.</p>
     </div>
   </footer>
-
+  
   <script src="{{url_for('static',filename='js/script.js')}}" defer></script>
 </body>
 </html>

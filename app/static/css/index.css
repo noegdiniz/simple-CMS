@@ -377,7 +377,6 @@ template {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--color-primary);
   position: relative;
   z-index: 1000;
 
@@ -449,6 +448,13 @@ template {
 
 /* Responsive Styles */
 @media (max-width: 768px) {
+  
+  .navbar-item {
+    padding: var(--spacing-xs);
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary-dark));
+    height: 50px;
+  }
+
   .nav-bard-show {
     display: block;
   }
@@ -457,9 +463,8 @@ template {
     display: flex;
     flex-direction: column;
     width: 100%;
-    background-color: var(--color-primary);
     position: absolute;
-    top: 30px;
+    top: 50px;
     left: 0;
     transform: translateY(-115%);
     transition: transform var(--transition-speed) ease-in-out;
@@ -472,7 +477,6 @@ template {
 
   .navbar-item {
     margin: 0;
-    text-align: center;
     opacity: 0; /* Start with items invisible */
     transition: opacity var(--transition-speed) ease;
   }
@@ -501,18 +505,17 @@ template {
 
 /* Big Logo Diamond Shape */
 .big-logo {
-  width: 200px; /* Adjust as needed */
-  height: 200px; /* Adjust as needed */
+  width: 200px;
+  height: 200px;
   object-fit: cover;
-  transform: rotate(45deg); /* Rotate to create diamond shape */
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); /* Shadow effect */
+  /* transform: rotate(45deg); */
+  /* box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); */
   overflow: hidden;
-  background: var(--color-white);
+  background: #ffffff00;
 }
 
 /* Adjust the image inside the diamond */
 .big-logo img {
-  transform: rotate(-45deg); /* Counter-rotate the image */
   object-fit: cover;
 }
 
@@ -521,10 +524,10 @@ template {
   height: 50px;
 }
 
-.logo-container {
+/* .logo-container {
   padding-top: 8rem;
   padding-bottom: 9rem;
-}
+} */
 
 .card {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -576,14 +579,6 @@ template {
   border-top: 1px solid var(--color-grey-medium);
 }
 
-.big-logo {
-  transition: transform 0.5s ease, box-shadow 0.5s ease;
-}
-
-.big-logo:hover {
-  transform: rotate(45deg) scale(1.1);
-  box-shadow: 0 0 25px rgba(0, 0, 0, 0.7);
-}
 
 .card {
   position: relative;
@@ -663,4 +658,13 @@ template {
   margin-top: var(--spacing-md);
 
   color: var(--color-primary-light);
+}
+
+.background-image {
+  width: 100%; /* Set the width of the div */
+  height: 100vh; /* Set the height of the div */
+  background-size: cover; /* Cover the entire div */
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-image: url('/static/fundo.jpeg'); /* Path to your image */
 }

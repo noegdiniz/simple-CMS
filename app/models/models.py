@@ -6,7 +6,7 @@ from flask_admin import form
 import os
 import os.path as op
 from sqlalchemy.event import listens_for
-from app.helpers.helpes import file_path_galeria, file_path_icons, file_path_docs
+from app.helpers.helpes import file_path
 
 # Define models
 roles_users = db.Table(
@@ -172,7 +172,7 @@ class Home(db.Model):
 def del_file(mapper, connection, target):
     if target.path:
         try:
-            os.remove(op.join(file_path_icons, target.path))
+            os.remove(op.join(file_path, target.path))
         except OSError:
             # Don't care if was not deleted because it does not exist
             pass
@@ -181,7 +181,7 @@ def del_file(mapper, connection, target):
 def del_file(mapper, connection, target):
     if target.path:
         try:
-            os.remove(op.join(file_path_docs, target.path))
+            os.remove(op.join(file_path, target.path))
         except OSError:
             # Don't care if was not deleted because it does not exist
             pass
@@ -191,12 +191,12 @@ def del_image(mapper, connection, target):
     if target.path:
         # Delete image
         try:
-            os.remove(op.join(file_path_galeria, target.path))
+            os.remove(op.join(file_path, target.path))
         except OSError:
             pass
 
         # Delete thumbnail
         try:
-            os.remove(op.join(file_path_galeria, form.thumbgen_filename(target.path)))
+            os.remove(op.join(file_path, form.thumbgen_filename(target.path)))
         except OSError:
             pass

@@ -10,7 +10,7 @@ from markupsafe import Markup
 from app.ext import db
 from datetime import date
 
-from app.helpers.helpes import file_path_news, file_path_galeria, file_path_icons, file_path_docs
+from app.helpers.helpes import file_path
 from wtforms import fields
 from wtforms import widgets
 from flask_admin.model import typefmt
@@ -148,7 +148,7 @@ class GallerieAdmin(RootModelView):
     # In this case, Flask-Admin won't attempt to merge various parameters for the field.
     form_extra_fields = {
         "path": form.ImageUploadField(
-            "Image", base_path=file_path_galeria, thumbnail_size=(100, 100, True)
+            "Image", base_path=file_path, thumbnail_size=(100, 100, True)
         )
     }
 
@@ -175,7 +175,7 @@ class DocsAdmin(RootModelView):
 
     # Pass additional parameters to 'path' to FileUploadField constructor
     form_args = {
-        "path": {"label": "File", "base_path": file_path_docs, "allow_overwrite": False}
+        "path": {"label": "File", "base_path": file_path, "allow_overwrite": False}
     }
 
     form_columns = ['title', 'path', 'doc_type']
@@ -229,7 +229,7 @@ class HomeAdmin(RootModelView):
     # In this case, Flask-Admin won't attempt to merge various parameters for the field.
     form_extra_fields = {
         "path": form.ImageUploadField(
-            "Logo", base_path=file_path_galeria, thumbnail_size=(100, 100, True)
+            "Logo", base_path=file_path, thumbnail_size=(100, 100, True)
         )
     }
 
@@ -255,7 +255,7 @@ class RoleAdmin(RootModelView):
 
     def can_edit(self):
         return current_user.has_permission('can_edit_role')
-
+    
     def can_delete(self):
         return current_user.has_permission('can_delete_role')
 
@@ -285,4 +285,3 @@ def configure(app):
             h=admin_helpers,
             get_url=url_for,
         )
-
