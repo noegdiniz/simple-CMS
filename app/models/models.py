@@ -52,6 +52,18 @@ class Role(db.Model, RoleMixin):
     can_delete_docs_types = db.Column(db.Boolean, default=False)
     can_view_docs_types = db.Column(db.Boolean, default=False)
 
+    # Permissions as boolean fields News_types
+    can_create_news_types = db.Column(db.Boolean, default=False)
+    can_edit_news_types = db.Column(db.Boolean, default=False)
+    can_delete_news_types = db.Column(db.Boolean, default=False)
+    can_view_news_types = db.Column(db.Boolean, default=False)
+
+    # Permissions as boolean fields Gallery_types
+    can_create_gallerie_types = db.Column(db.Boolean, default=False)
+    can_edit_gallerie_types = db.Column(db.Boolean, default=False)
+    can_delete_gallerie_types = db.Column(db.Boolean, default=False)
+    can_view_gallerie_types = db.Column(db.Boolean, default=False)
+
     # Permissions as boolean fields Home
     can_create_home = db.Column(db.Boolean, default=False)
     can_edit_home = db.Column(db.Boolean, default=False)
@@ -98,31 +110,39 @@ class News(db.Model):
     title = db.Column(db.String(200), nullable=False)
     content = db.Column(db.Text)
 
+    path = db.Column(db.String(255), nullable=False)
+
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    news_type_id = db.Column(db.Integer, db.ForeignKey('news_types.id'), nullable=False)
 
     created_at = db.Column(db.DateTime, default=datetime.today())
     updated_at = db.Column(db.DateTime, default=datetime.today(), onupdate=datetime.today())
     
     author = db.relationship('User', backref=db.backref('news', lazy=True))
 
-
+    news_type = db.relationship('News_types', backref=db.backref('news', lazy=True))
+    
     def format_brazilian_datetime(self, date_time):
         """Formats a datetime object to Brazilian format (dd/mm/yyyy HH:MM:SS)."""
         return date_time.strftime('%d/%m/%Y %H:%M:%S')
     
     def __str__(self):
         return self.title
-    
+
 class Galerie(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text, nullable=True)
     path = db.Column(db.String(255), nullable=False)
+    content = db.Column(db.Text)
+    
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    gallerie_type_id = db.Column(db.Integer, db.ForeignKey('gallerie_types.id'), nullable=False)
 
     created_at = db.Column(db.DateTime, default=datetime.today())
     updated_at = db.Column(db.DateTime, default=datetime.today(), onupdate=datetime.today())
     
+    gallerie_type = db.relationship('Gallerie_types', backref=db.backref('gallerie', lazy=True))
     author = db.relationship('User', backref=db.backref('galeries', lazy=True))
 
     def __str__(self):
@@ -142,7 +162,7 @@ class Docs(db.Model):
 
     author = db.relationship('User', backref=db.backref('docs', lazy=True))
     doc_type = db.relationship('Docs_types', backref=db.backref('docs', lazy=True))
-
+    
     def __str__(self):
         return self.title
     
@@ -151,31 +171,43 @@ class Docs_types(db.Model):
     name = db.Column(db.String(100), nullable=False, unique=True)
     description = db.Column(db.String(255), nullable=True)
 
+    publico = db.Column(db.Boolean(), default=False)
+
     def __str__(self):
         return self.name
-    
-class Home(db.Model):
+
+class News_types(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    page_title = db.Column(db.String(100), nullable=False, unique=True)
+    name = db.Column(db.String(100), nullable=False, unique=True)
+    description = db.Column(db.String(255), nullable=True)
 
-    nav_title = db.Column(db.String(255), nullable=True)
+    publico = db.Column(db.Boolean(), default=False)
+
+    def __str__(self):
+        return self.name
+
+class Gallerie_types(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(100), nullable=False, unique=True)
+    description = db.Column(db.String(255), nullable=True)
+
+    publico = db.Column(db.Boolean(), default=False)
+
+    def __str__(self):
+        return self.name
+
+class Sobre(db.Model):
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    tipo = db.Column(db.String(100), nullable=False, unique=True)
+
+    titulo = db.Column(db.String(255), nullable=True)
     
-    home_text = db.Column(db.String(255), nullable=True)
-
-    path = db.Column(db.String(255), nullable=True)
-
+    conteudo = db.Column(db.String, nullable=True)
+    
     def __str__(self):
         return self.name
 
 # Delete hooks for models, delete files if models are getting deleted
-@listens_for(Home, "after_delete")
-def del_file(mapper, connection, target):
-    if target.path:
-        try:
-            os.remove(op.join(file_path, target.path))
-        except OSError:
-            # Don't care if was not deleted because it does not exist
-            pass
 
 @listens_for(Docs, "after_delete")
 def del_file(mapper, connection, target):

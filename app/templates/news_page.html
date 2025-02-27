@@ -1,0 +1,18 @@
+{% extends 'base_page.html' %}
+
+{% block menu %}
+    {%for type in noticias_types%}
+    <a href="#{{type.name}}" class="navbar-link" id="{{type.name}}">{{type.name}}</a>
+    <script>
+        $("#{{type.name}}").click(() => {
+        fetch("{{url_for('main_bps.noticias_hub', type_id=type.id)}}").then()
+        .then(response => response.text())
+        .then(text => $("#hub").html(text))
+        })
+    </script>
+    {%endfor%}
+{% endblock %}
+
+{% block content %}
+    
+{% endblock %}

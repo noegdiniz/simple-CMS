@@ -7,6 +7,19 @@
   box-sizing: border-box; /* Ensures padding and border are included in element dimensions */
 }
 
+.menu a {
+  padding: var(--spacing-xs);
+  color: #1d1d1d;
+}
+
+* {
+  font-family: "Roboto", serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+
 html {
   line-height: 1.15; /* Correct the line height in all browsers */
   -webkit-text-size-adjust: 100%; /* Prevent adjustments of font size after orientation changes in iOS */
@@ -14,7 +27,6 @@ html {
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; /* Default system font stack */
   line-height: 1.5;
 }
 
@@ -59,6 +71,9 @@ button {
   color: inherit;
   border: none;
   outline: none;
+  
+  padding: var(--spacing-xxs);
+  border-radius: 4px;
 }
 
 /* Remove default table styling */
@@ -118,13 +133,11 @@ hr {
 
 /* Remove default preformatted text styling */
 pre {
-  font-family: monospace, monospace;
   font-size: 1em;
 }
 
 /* Remove default code styling */
 code {
-  font-family: monospace, monospace;
   font-size: 1em;
 }
 
@@ -209,8 +222,8 @@ template {
   --color-secondary-light: #6699cc; /* Lighter Navy Blue */
 
     /* Font Families */
-    --font-family-primary: 'Arial', sans-serif;
-    --font-family-secondary: 'Georgia', serif;
+    --font-family-primary: "Roboto", serif;;
+    --font-family-secondary: "Roboto", serif;;
   
     /* Font Sizes */
     --font-size-small: 0.875rem; /* 14px */
@@ -457,6 +470,10 @@ template {
 
   .nav-bard-show {
     display: block;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
   }
 
   .navbar-menu {
@@ -492,7 +509,7 @@ template {
 
 /* Navbar Logo */
 .navbar-logo {
-  height: 40px; /* Adjust as needed */
+  height: 80px; /* Adjust as needed */
   vertical-align: middle;
 }
 
@@ -522,6 +539,10 @@ template {
 .logo-background {
   background: linear-gradient(135deg, var(--color-primary), var(--color-secondary-dark));
   height: 50px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
 }
 
 /* .logo-container {
@@ -541,32 +562,40 @@ template {
 .footer {
   background-color: var(--color-primary-dark);
   color: var(--color-white);
-  padding: var(--spacing-xl) 0;
+  padding: var(--spacing-xxl) 0;
   margin-top: var(--spacing-xxl);
+  font-family: 'Roboto', sans-serif;
 }
 
 .footer-content {
   display: flex;
-  justify-content: space-around;
+  flex-wrap: wrap; /* Allow wrapping for smaller screens */
+  justify-content: space-between;
   max-width: 1200px;
   margin: 0 auto;
-  padding: var(--spacing-md);
+  padding: 0 var(--spacing-md);
+  gap: var(--spacing-lg); /* Add gap between sections */
 }
 
 .footer-section {
   flex: 1;
-  margin: 0 var(--spacing-md);
+  min-width: 200px; /* Minimum width for each section */
+  margin: var(--spacing-md) 0;
 }
 
 .footer-title {
   font-size: var(--font-size-medium);
-  margin-bottom: var(--spacing-sm);
+  font-weight: 500;
+  margin-bottom: var(--spacing-md);
+  color: var(--color-primary-light);
 }
 
 .footer-link {
   color: var(--color-white);
   text-decoration: none;
   transition: color 0.3s ease;
+  display: block; /* Make links stack vertically */
+  margin-bottom: var(--spacing-xs);
 }
 
 .footer-link:hover {
@@ -575,8 +604,27 @@ template {
 
 .footer-bottom {
   text-align: center;
-  padding: var(--spacing-sm) 0;
+  padding: var(--spacing-md) 0;
   border-top: 1px solid var(--color-grey-medium);
+  margin-top: var(--spacing-lg);
+  font-size: var(--font-size-small);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-section {
+    margin: var(--spacing-md) 0;
+  }
+
+  .footer-link {
+    margin-bottom: var(--spacing-sm);
+  }
 }
 
 
@@ -619,6 +667,7 @@ template {
   border-radius: 8px;
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: var(--spacing-md);
 }
 
 .gallery-item:hover {
@@ -656,7 +705,7 @@ template {
 
   margin-bottom: 0;
   margin-top: var(--spacing-md);
-
+  
   color: var(--color-primary-light);
 }
 
@@ -668,3 +717,49 @@ template {
   background-repeat: no-repeat; /* Do not repeat the image */
   background-image: url('/static/fundo.jpeg'); /* Path to your image */
 }
+
+.background-image::before {
+  content: '';
+  position: absolute;
+
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #000000;
+}
+
+.home-text-container {
+  padding-right: var(--spacing-lg);
+  padding-left: var(--spacing-lg);
+  margin-bottom: 0;
+}
+
+.search-filter-bar {
+  padding-left: var(--spacing-md);
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  padding: var(--spacing-sm);
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-sm);
+}
+
+.flex-wrap{
+  flex-wrap: wrap;
+}
+
+.destaque {
+  margin: var(--spacing-md);
+}
+
+.menu {
+  margin: var(--spacing-xxs);
+  padding: var(--spacing-xxs);
+  background-color: var(--color-grey-very-light);
+};

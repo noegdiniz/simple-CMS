@@ -1,0 +1,12 @@
+{% extends 'base_page.html' %}
+
+{% block menu %}
+    {%for type in galerie_types%}
+    <a href="#{{type.name}}" onclick="load_news_hub({{type.id}})">{{type.name}}</a>
+
+    {%endfor%}
+{% endblock %}
+
+{% block content %}
+    
+{% endblock %}

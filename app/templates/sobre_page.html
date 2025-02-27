@@ -1,0 +1,24 @@
+{% extends 'base_page.html' %}
+
+{% block menu %}
+    <a href="#historia" id="historia">Historia</a>
+    <a href="#ritos" id="ritos">Ritos</a>
+
+    <script>
+        $("#ritos").click(() => {
+        fetch({{url_for('main_bps.sobre_content', type_id="ritos")}}).then()
+        .then(response => response.text())
+        .then(text => $("#hub"))
+        })
+
+        $("#historia").click(() => {
+        fetch({{url_for('main_bps.sobre_content', type_id="historia")}}).then()
+        .then(response => response.text())
+        .then(text => $("#hub"))
+        })
+    </script>
+{% endblock %}
+
+{% block content %}
+
+{% endblock %}

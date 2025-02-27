@@ -1,0 +1,84 @@
+<div class="hub flex-column">
+    <div class="titulo">
+
+    </div>
+
+    <div class="hub-content flex-column">
+        <div class="hub-filter">
+            <div class="search-filter-bar">
+                <input type="text" id="galeriaSearch" placeholder="Buscar Galeria..." class="search-bar">
+                <select id="galeriaFilter" class="type-select">
+                  <option value="">Todas</option>
+                  <option value="recent">Recentes</option>
+                  <option value="oldest">Antigas</option>
+                </select>
+              </div>
+        </div>
+
+        <div class="hub-main flex-row">
+            <div class="destaque">
+                <div class="gallery-item" onclick="load_news_content({{destaque.id}})">
+                    <p class="text-primary text-center">{{destaque.title}}</p>
+                    <img src="{{url_for('static',filename=destaque.path)}}" alt="Gallery Image 1">
+                    <p class="gallery-caption">{{destaque.description}}</p>
+                    <p class="date-time">Data: {{destaque.created_at.strftime('%d/%m/%Y %H:%M')}}</p>
+                  </div>
+            </div>
+            <div class="gallery-grid flex-row flex-wrap" id="galeriaList">
+              {%for foto in galerie_db}
+                {%if foto.id != destaque.id%}
+                <div class="gallery-item" onclick="load_news_content({{foto.id}})">
+                    <p class="text-primary text-center">{{foto.title}}</p>
+                    <img src="{{url_for('static',filename=foto.path)}}" alt="Gallery Image 1">
+                    <p class="gallery-caption">{{foto.description}}</p>
+                    <p class="date-time">Data: {{foto.created_at.strftime('%d/%m/%Y %H:%M')}}</p>
+                </div>
+                {%endif%}
+              {%endfor%}
+              </div>
+              <script>
+                    // Galeria Search and Filter
+                    var galeriaSearch = document.getElementById('galeriaSearch');
+                    var galeriaFilter = document.getElementById('galeriaFilter');
+                    var galeriaList = document.getElementById('galeriaList').getElementsByClassName('gallery-item');
+
+                    galeriaSearch.addEventListener('input', filterGaleria);
+                    galeriaFilter.addEventListener('change', filterGaleria);
+
+                    function filterGaleria() {
+                        var searchTerm = galeriaSearch.value.toLowerCase().split(" ");
+                        var filterValue = galeriaFilter.value;
+
+                        Array.from(galeriaList).forEach(function(foto) {
+                        var title = foto.querySelector('.text-primary').textContent.toLowerCase();
+                        var tipo = foto.querySelector('.text-type').textContent.toLowerCase();
+                        var date = foto.querySelector('.date-time').textContent;
+
+                        var content = title.concat(tipo);
+                        console.log(content)
+
+                        var matchesSearch = searchTerm.every(word => content.includes(word));
+                        var matchesFilter = filterValue === "" || 
+                                            (filterValue === "recent" && isRecent(date)) || 
+                                            (filterValue === "oldest" && !isRecent(date));
+
+                        if (matchesSearch && matchesFilter) {
+                            foto.style.display = '';
+                        } else {
+                            foto.style.display = 'none';
+                        }
+                        });
+                    }
+
+                    // Helper function to check if a date is recent
+                    function isRecent(dateString) {
+                        var date = new Date(dateString.split(' ')[0].split('/').reverse().join('-'));
+                        var now = new Date();
+                        var diffTime = Math.abs(now - date);
+                        var diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                        return diffDays <= 30; // Consider recent if within the last 30 days
+                    }
+              </script>
+        </div>
+    </div>
+</div>

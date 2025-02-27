@@ -1,0 +1,68 @@
+
+    <header class="nav-bard-show">
+      <nav class="navbar logo-background">
+        <div class="navbar-brand">
+          <!-- <img src="{{url_for('static',filename=home.path)}}" alt="Logo" class="navbar-logo padding-sm"> -->
+        </div>
+        <div class="navbar-toggle" id="mobile-menu">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+        <ul class="navbar-menu">
+          <li class="navbar-item"><a id="home" href="/" class="navbar-link">Home</a></li>
+          <li class="navbar-item"><a id="noticias" href="#Noticias" class="navbar-link">Noticias</a></li>
+          <li class="navbar-item"><a id="documentos" href="#Documentos" class="navbar-link">Documentos</a></li>
+          <li class="navbar-item"><a id="galeria" href="#Galeria" class="navbar-link">Galeria</a></li>
+        </ul>
+      </nav>
+    </header>
+      <div class="logo-container navbar-menu" name="Home" id="Home">
+        <div class="text-center logo-background">
+          <div class="home-box menu_size">
+            <li class="navbar-item"><a id="home-1" href="/" class="navbar-link">Home</a></li>
+            <li class="navbar-item"><a id="sobre-1" href="#Sobre" class="navbar-link">Sobre a LUMP</a></li>
+          </div>
+
+          <!-- Big Logo in Diamond Shape -->
+          <div class="menu_size text-center" style="padding-top: 150px;">
+            <div class="big-logo-container big-logo">
+              <!-- <img src="{{url_for('static',filename=home.path)}}" alt="Big Logo"> -->
+            </div>
+          </div>
+
+          <div class="home-box menu_size">
+            <li class="navbar-item"><a id="noticias-1" href="#Noticias" class="navbar-link">Comunicação</a></li>
+            <li class="navbar-item"><a id="galeria-1" href="#Galeria" class="navbar-link">Galeria</a></li>
+          </div>
+          
+        </div>
+      </div>
+      
+
+        <div>
+            <script>
+                var mobileMenu = document.getElementById('mobile-menu');
+                var navbarMenu = document.querySelector('.navbar-menu');
+    
+                mobileMenu.addEventListener('click', () => {
+                console.log("teste");
+                mobileMenu.classList.toggle('active');
+                navbarMenu.classList.toggle('active');
+                });
+            </script>
+            
+            <section class="gallery-section margin-top-sm" name="Noticias" id="Noticias">
+            <div class="page flex-row">
+                <div class="menu" id="menu flex-column">
+                    {% block menu %}{% endblock %}
+                </div>
+                <div class="hub flex-row" id="hub">
+                    {% block hub %}{% endblock %}
+                </div>
+            </div>
+            <script src="{{url_for('static',filename='js/script.js')}}" defer></script>
+            <section>
+        </div>
+      </div>
+      

@@ -1,5 +1,5 @@
 from flask_admin.contrib.sqla import ModelView
-from app.models.models import User, News, Galerie, Docs, Docs_types, Home, Role, User
+from app.models.models import Sobre, User, News, Galerie, Docs, Docs_types, Role, User, News_types, Gallerie_types
 from flask import redirect, url_for, request, abort
 from flask_security import current_user, login_required
 from flask_admin import helpers as admin_helpers
@@ -29,9 +29,10 @@ MY_DEFAULT_FORMATTERS.update({
 # see https://wtforms.readthedocs.io/en/latest/widgets.html#custom-widgets
 class CKTextAreaWidget(widgets.TextArea):
     def __call__(self, field, **kwargs):
-        # add WYSIWYG class to existing classes
+        # add WYSIWYG class to existing classes and set display to none
         existing_classes = kwargs.pop("class", "") or kwargs.pop("class_", "")
-        kwargs["class"] = "{} {}".format(existing_classes, "ckeditor")
+        kwargs["class"] = "{} {}".format(existing_classes, "editor")
+        kwargs["style"] = "display: none;"
         return super().__call__(field, **kwargs)
 
 class CKTextAreaField(fields.TextAreaField):
@@ -110,7 +111,27 @@ class NewsAdmin(RootModelView):
     create_template = "create_page.html"
     edit_template = "edit_page.html"
 
-    form_columns = ['title', 'content']
+    form_columns = ['title', 'content', 'path', 'news_type']
+
+    def _list_thumbnail(view, context, model, name):
+        if not model.path:
+            return ""
+
+        return Markup(
+            '<img src="{}">'.format(
+                url_for("static", filename=form.thumbgen_filename(model.path))
+            )
+        )
+
+    column_formatters = {"path": _list_thumbnail}
+
+    # Alternative way to contribute field is to override it completely.
+    # In this case, Flask-Admin won't attempt to merge various parameters for the field.
+    form_extra_fields = {
+        "path": form.ImageUploadField(
+            "Image", base_path=file_path, thumbnail_size=(100, 100, True)
+        )
+    }
 
     def is_accessible(self):
         return current_user.is_authenticated and current_user.has_permission('can_view_news')
@@ -130,7 +151,11 @@ class NewsAdmin(RootModelView):
         super().on_model_change(form, model, is_created)
 
 class GallerieAdmin(RootModelView):
-    form_columns = ['title', 'description', 'path']
+    form_columns = ['title', 'description', 'path', 'content', 'gallerie_type']
+
+    form_overrides = {"content": CKTextAreaField}
+    create_template = "create_page.html"
+    edit_template = "edit_page.html"
 
     def _list_thumbnail(view, context, model, name):
         if not model.path:
@@ -212,27 +237,37 @@ class DocsTypesAdmin(RootModelView):
     def can_delete(self):
         return current_user.has_permission('can_delete_docs_types')
 
+class GallerieTypesAdmin(RootModelView):
+    form_columns = ['name', 'description']
+
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.has_permission('can_view_gallerie_types')
+    
+    def can_create(self):
+        return current_user.has_permission('can_create_gallerie_types')
+
+    def can_edit(self):
+        return current_user.has_permission('can_edit_gallerie_types')
+
+    def can_delete(self):
+        return current_user.has_permission('can_delete_gallerie_types')
+
+class NewsTypesAdmin(RootModelView):
+    form_columns = ['name', 'description']
+
+    def is_accessible(self):
+        return current_user.is_authenticated and current_user.has_permission('can_view_news_types')
+    
+    def can_create(self):
+        return current_user.has_permission('can_create_news_types')
+
+    def can_edit(self):
+        return current_user.has_permission('can_edit_news_types')
+
+    def can_delete(self):
+        return current_user.has_permission('can_delete_news_types')
+
 class HomeAdmin(RootModelView):
-    def _list_thumbnail(view, context, model, name):
-        if not model.path:
-            return ""
-
-        return Markup(
-            '<img src="{}">'.format(
-                url_for("static", filename=form.thumbgen_filename(model.path))
-            )
-        )
-
-    column_formatters = {"path": _list_thumbnail}
-
-    # Alternative way to contribute field is to override it completely.
-    # In this case, Flask-Admin won't attempt to merge various parameters for the field.
-    form_extra_fields = {
-        "path": form.ImageUploadField(
-            "Logo", base_path=file_path, thumbnail_size=(100, 100, True)
-        )
-    }
-
     def is_accessible(self):
         return current_user.is_authenticated and current_user.has_permission('can_view_home')
     
@@ -255,7 +290,7 @@ class RoleAdmin(RootModelView):
 
     def can_edit(self):
         return current_user.has_permission('can_edit_role')
-    
+
     def can_delete(self):
         return current_user.has_permission('can_delete_role')
 
@@ -268,7 +303,11 @@ def configure(app):
     admin.add_view(GallerieAdmin(Galerie, app.db.session, name='Galeria', category='Conteudo'))
     admin.add_view(DocsAdmin(Docs, app.db.session, name='Documentos', category='Conteudo'))
     admin.add_view(DocsTypesAdmin(Docs_types, app.db.session, name='Tipo Documento', category='Conteudo'))
-    admin.add_view(HomeAdmin(Home, app.db.session, name='Home', category='Conteudo'))
+    
+    admin.add_view(GallerieTypesAdmin(Gallerie_types, app.db.session, name='Tipo Galeria', category='Conteudo'))
+    admin.add_view(NewsTypesAdmin(News_types, app.db.session, name='Tipo Noticia', category='Conteudo'))
+    
+    admin.add_view(HomeAdmin(Sobre, app.db.session, name='Home', category='Conteudo'))
 
     admin.add_view(RoleAdmin(Role, app.db.session, name='Perfil', category='Usuarios/Perfis'))
 

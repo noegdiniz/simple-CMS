@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 9254790bd511
+Revision ID: 76896094c54f
 Revises: 
-Create Date: 2025-02-13 08:27:11.988475
+Create Date: 2025-02-20 13:00:04.610420
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '9254790bd511'
+revision = '76896094c54f'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -22,17 +22,34 @@ def upgrade():
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('name', sa.String(length=100), nullable=False),
     sa.Column('description', sa.String(length=255), nullable=True),
+    sa.Column('publico', sa.Boolean(), nullable=True),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('name')
+    )
+    op.create_table('gallerie_types',
+    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('name', sa.String(length=100), nullable=False),
+    sa.Column('description', sa.String(length=255), nullable=True),
+    sa.Column('publico', sa.Boolean(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
     op.create_table('home',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('page_title', sa.String(length=100), nullable=False),
-    sa.Column('nav_text', sa.String(length=255), nullable=True),
+    sa.Column('nav_title', sa.String(length=255), nullable=True),
     sa.Column('home_text', sa.String(length=255), nullable=True),
     sa.Column('path', sa.String(length=255), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('page_title')
+    )
+    op.create_table('news_types',
+    sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
+    sa.Column('name', sa.String(length=100), nullable=False),
+    sa.Column('description', sa.String(length=255), nullable=True),
+    sa.Column('publico', sa.Boolean(), nullable=True),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('name')
     )
     op.create_table('role',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
@@ -75,7 +92,6 @@ def upgrade():
     sa.Column('email', sa.String(length=255), nullable=True),
     sa.Column('password', sa.String(length=255), nullable=True),
     sa.Column('active', sa.Boolean(), nullable=True),
-    sa.Column('confirmed_at', sa.DateTime(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.Column('fs_uniquifier', sa.String(length=64), nullable=False),
@@ -101,19 +117,23 @@ def upgrade():
     sa.Column('description', sa.Text(), nullable=True),
     sa.Column('path', sa.String(length=255), nullable=False),
     sa.Column('author_id', sa.Integer(), nullable=False),
+    sa.Column('gallerie_type_id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['author_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['gallerie_type_id'], ['gallerie_types.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('news',
     sa.Column('id', sa.Integer(), autoincrement=True, nullable=False),
     sa.Column('title', sa.String(length=200), nullable=False),
-    sa.Column('content', sa.Text(), nullable=False),
+    sa.Column('content', sa.Text(), nullable=True),
     sa.Column('author_id', sa.Integer(), nullable=False),
+    sa.Column('news_type_id', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['author_id'], ['user.id'], ),
+    sa.ForeignKeyConstraint(['news_type_id'], ['news_types.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('roles_users',
@@ -133,6 +153,8 @@ def downgrade():
     op.drop_table('docs')
     op.drop_table('user')
     op.drop_table('role')
+    op.drop_table('news_types')
     op.drop_table('home')
+    op.drop_table('gallerie_types')
     op.drop_table('docs_types')
     # ### end Alembic commands ###

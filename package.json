@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@ckeditor/ckeditor5-upload": "^44.2.1",
+    "ckeditor5": "^44.2.1"
+  }
+}
