@@ -16,9 +16,9 @@ def create_app():
     migrate.configure(app)
     main.configure(app)
     mail.configure(app)
-    admin.configure(app)
     login.configure(app, user_datastore)
     user_datastore.configure(app)
 
-
+    admin.configure(app)
+    
     return app
