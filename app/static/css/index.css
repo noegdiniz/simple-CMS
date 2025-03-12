@@ -248,518 +248,141 @@ template {
     --transition-speed: 0.3s; /* Animation speed */
   }
   
-  body {
-    font-family: var(--font-family-primary);
-    font-size: var(--font-size-base);
-    color: var(--color-grey-dark);
-    line-height: 1.6;
-  }
-  
-  html {
-    scroll-behavior: smooth;
-  }
+/* Existing styles remain unchanged, adding new ones below */
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #f4f7fa;
+  color: #333;
+}
 
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-family-secondary);
-    color: var(--color-primary-dark);
-    margin-top: 0;
-  }
-  
-  h1 {
-    font-size: var(--font-size-xlarge);
-    font-weight: var(--font-weight-bold);
-  }
-  
-  h2 {
-    font-size: var(--font-size-large);
-    font-weight: var(--font-weight-bold);
-  }
-  
-  h3 {
-    font-size: var(--font-size-medium);
-    font-weight: var(--font-weight-bold);
-  }
-  
-  p {
-    margin-bottom: 1rem;
-  }
-  
-  .margin-top-sm {
-    margin-top: var(--spacing-sm);
-  }
-  
-  .margin-bottom-sm {
-    margin-bottom: var(--spacing-sm);
-  }
-  
-  .padding-sm {
-    padding: var(--spacing-sm);
-  }
-  
-  .padding-md {
-    padding: var(--spacing-md);
-  }
-
-  .button {
-    display: inline-block;
-    padding: var(--spacing-xs) var(--spacing-sm);
-    font-size: var(--font-size-base);
-    font-weight: var(--font-weight-bold);
-    color: var(--color-white);
-    background-color: var(--color-primary);
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .button:hover {
-    background-color: var(--color-primary-dark);
-  }
-  
-  .button-secondary {
-    background-color: var(--color-grey-medium);
-  }
-  
-  .button-secondary:hover {
-    background-color: var(--color-grey-dark);
-  }
-
-  .card {
-    background-color: var(--color-white);
-    border: 1px solid var(--color-grey-light);
-    border-radius: 8px;
-    padding: var(--spacing-md);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .card-title {
-    font-size: var(--font-size-medium);
-    color: var(--color-primary-dark);
-    margin-bottom: var(--spacing-sm);
-  }
-  
-  .card-body {
-    font-size: var(--font-size-base);
-    color: var(--color-grey-dark);
-  }
-  
-  .input {
-    width: 100%;
-    padding: var(--spacing-xs);
-    font-size: var(--font-size-base);
-    border: 1px solid var(--color-grey-light);
-    border-radius: 4px;
-    margin-bottom: var(--spacing-sm);
-  }
-  
-  .input:focus {
-    border-color: var(--color-primary);
-    outline: none;
-  }
-  
-  .label {
-    display: block;
-    font-size: var(--font-size-small);
-    color: var(--color-grey-dark);
-    margin-bottom: var(--spacing-xxs);
-  }
-
-  .text-center {
-      text-align: center;
-      align-items: center;
-      justify-content: space-evenly;
-      display: flex;
-      width: 100%;
-  }
-  
-  .text-primary {
-    color: var(--color-primary);
-  }
-  
-  .bg-grey-light {
-    background-color: var(--color-grey-very-light);
-  }
-  
-  .full-width {
-    width: 100%;
-  }
-  
-/* Navbar Styles */
 .navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: relative;
-  z-index: 1000;
-
-  padding: var(--spacing-xs);
-
+  background: linear-gradient(90deg, #005dc1, #009bba);
 }
 
 .navbar-brand {
-  font-size: 1rem;
-  font-weight: bold;
-  color: var(--color-white);
+  font-size: 1.5rem;
 }
-
-.navbar-menu {
-  display: flex;
-  list-style: none;
-  padding: 0;
-  transition: transform var(--transition-speed) ease-in-out;
-}
-
-.navbar-item {
-  padding: var(--spacing-xs);
-}
-
-.navbar-link {
-  color: var(--color-white);
-  text-decoration: none;
-  font-size: 1rem;
-  transition: color var(--transition-speed) ease;
-}
-
-.navbar-link:hover {
-  color: var(--color-primary-dark);
-}
-
-/* Hamburger Menu */
-.navbar-toggle {
-  display: none;
-  flex-direction: column;
-  cursor: pointer;
-  z-index: 100;
-}
-
-.bar {
-  width: 25px;
-  height: 3px;
-  background-color: var(--color-white);
-  margin: 4px 0;
-  transition: transform var(--transition-speed) ease, opacity var(--transition-speed) ease;
-  transform-origin: center;
-}
-
-/* Hamburger Animation */
-.navbar-toggle.active .bar:nth-child(1) {
-  transform: rotate(315deg) translate(-9px, 6px);
-}
-
-.navbar-toggle.active .bar:nth-child(2) {
-  opacity: 0;
-}
-
-.navbar-toggle.active .bar:nth-child(3) {
-  transform: rotate(405deg) translate(-9px, -6px);
-}
-
-.nav-bard-show {
-  display: none;
-}
-
-/* Responsive Styles */
-@media (max-width: 768px) {
-  
-  .navbar-item {
-    padding: var(--spacing-xs);
-    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary-dark));
-    height: 50px;
-  }
-
-  .nav-bard-show {
-    display: block;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-  }
-
-  .navbar-menu {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    position: absolute;
-    top: 50px;
-    left: 0;
-    transform: translateY(-115%);
-    transition: transform var(--transition-speed) ease-in-out;
-    z-index: -1;
-  }
-
-  .navbar-menu.active {
-    transform: translateY(0); /* Slide menu into view */
-  }
-
-  .navbar-item {
-    margin: 0;
-    opacity: 0; /* Start with items invisible */
-    transition: opacity var(--transition-speed) ease;
-  }
-
-  .navbar-menu.active .navbar-item {
-    opacity: 1; /* Fade in items when menu is active */
-  }
-
-  .navbar-toggle {
-    display: flex;
-  }
-}
-
-/* Navbar Logo */
-.navbar-logo {
-  height: 80px; /* Adjust as needed */
-  vertical-align: middle;
-}
-
-/* Big Logo Container */
-.big-logo-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Big Logo Diamond Shape */
-.big-logo {
-  width: 200px;
-  height: 200px;
-  object-fit: cover;
-  /* transform: rotate(45deg); */
-  /* box-shadow: 0 0 15px rgba(0, 0, 0, 0.5); */
-  overflow: hidden;
-  background: #ffffff00;
-}
-
-/* Adjust the image inside the diamond */
-.big-logo img {
-  object-fit: cover;
-}
-
-.logo-background {
-  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary-dark));
-  height: 50px;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1000;
-}
-
-/* .logo-container {
-  padding-top: 8rem;
-  padding-bottom: 9rem;
-} */
 
 .card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: none;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-.footer {
-  background-color: var(--color-primary-dark);
-  color: var(--color-white);
-  padding: var(--spacing-xxl) 0;
-  margin-top: var(--spacing-xxl);
-  font-family: 'Roboto', sans-serif;
-}
-
-.footer-content {
-  display: flex;
-  flex-wrap: wrap; /* Allow wrapping for smaller screens */
-  justify-content: space-between;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 var(--spacing-md);
-  gap: var(--spacing-lg); /* Add gap between sections */
-}
-
-.footer-section {
-  flex: 1;
-  min-width: 200px; /* Minimum width for each section */
-  margin: var(--spacing-md) 0;
-}
-
-.footer-title {
-  font-size: var(--font-size-medium);
-  font-weight: 500;
-  margin-bottom: var(--spacing-md);
-  color: var(--color-primary-light);
-}
-
-.footer-link {
-  color: var(--color-white);
-  text-decoration: none;
-  transition: color 0.3s ease;
-  display: block; /* Make links stack vertically */
-  margin-bottom: var(--spacing-xs);
-}
-
-.footer-link:hover {
-  color: var(--color-primary-light);
-}
-
-.footer-bottom {
-  text-align: center;
-  padding: var(--spacing-md) 0;
-  border-top: 1px solid var(--color-grey-medium);
-  margin-top: var(--spacing-lg);
-  font-size: var(--font-size-small);
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .footer-content {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-  .footer-section {
-    margin: var(--spacing-md) 0;
-  }
-
-  .footer-link {
-    margin-bottom: var(--spacing-sm);
-  }
-}
-
-
-.card {
-  position: relative;
-  background: var(--color-white);
-  border: 1px solid transparent;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.card::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary-dark));
-  z-index: -1;
-  border-radius: 10px;
-}
-
-/* Gallery Section Styles */
-.gallery-section {
-  padding: var(--spacing-lg) 0;
-  background-color: var(--color-grey-very-light);
-}
-
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: var(--spacing-md);
-  padding: var(--spacing-md);
-}
-
-.gallery-item {
-  background-color: var(--color-white);
-  border: 1px solid var(--color-grey-light);
-  border-radius: 8px;
-  overflow: hidden;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  padding: var(--spacing-md);
-}
-
-.gallery-item:hover {
   transform: translateY(-5px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
-.gallery-item img {
-  width: 100%;
-  height: auto;
-  display: block;
+.card-img-top {
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
 }
 
-.gallery-caption {
-  padding: var(--spacing-xs);
-  text-align: center;
-  font-size: var(--font-size-small);
-  color: var(--color-grey-dark);
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  border-radius: 0.25rem;
 }
 
-.home-box {
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+.btn-outline-primary {
+  border-radius: 0.25rem;
+}
+
+footer {
+  background: linear-gradient(90deg, #343a40, #495057);
+}
+
+footer a {
+  color: #fff;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+.carousel-caption {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+/* Hero Section Styles */
+.hero-section {
+  height: 100vh;
   display: flex;
-  flex-direction: row;
-  justify-content: space-around;;
   align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
 }
 
-.menu_size {
-  width: 33.33%;
+.overlay {
+  z-index: 1;
 }
 
-.date-time{
-  font-size: var(--font-size-small);
-  font-weight: var(--font-weight-bold);
-
-  margin-bottom: 0;
-  margin-top: var(--spacing-md);
-  
-  color: var(--color-primary-light);
+.hero-section .container {
+  z-index: 2;
 }
 
-.background-image {
-  width: 100%; /* Set the width of the div */
-  height: 100vh; /* Set the height of the div */
-  background-size: cover; /* Cover the entire div */
-  background-position: center; /* Center the image */
-  background-repeat: no-repeat; /* Do not repeat the image */
-  background-image: url('/static/fundo.jpeg'); /* Path to your image */
+.hero-section h1 {
+  font-size: 3rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.background-image::before {
-  content: '';
-  position: absolute;
-
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: #000000;
+/* About Section Styles */
+#about {
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  position: relative;
+  overflow: hidden;
 }
 
-.home-text-container {
-  padding-right: var(--spacing-lg);
-  padding-left: var(--spacing-lg);
-  margin-bottom: 0;
+.display-4 {
+  font-size: 3rem;
+  color: #007bff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  letter-spacing: 1px;
 }
 
-.search-filter-bar {
-  padding-left: var(--spacing-md);
+
+.about-card {
+  background: #fff;
+  border-radius: 1rem;
 }
 
-.flex-row {
-  display: flex;
-  flex-direction: row;
-  padding: var(--spacing-sm);
+.about-card:hover {
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
 }
 
-.flex-column {
-  display: flex;
-  flex-direction: column;
-  padding: var(--spacing-sm);
+.about-card .lead {
+  font-size: 1.25rem;
+  color: #555;
+  line-height: 1.6;
 }
 
-.flex-wrap{
-  flex-wrap: wrap;
+/* Add to existing styles */
+.display-5 {
+  font-size: 2.5rem;
+  color: #007bff;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-.destaque {
-  margin: var(--spacing-md);
+.content {
+  line-height: 1.8;
+  font-size: 1.1rem;
 }
 
-.menu {
-  margin: var(--spacing-xxs);
-  padding: var(--spacing-xxs);
-  background-color: var(--color-grey-very-light);
-};
+.content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.text-muted {
+  font-size: 0.9rem;
+}

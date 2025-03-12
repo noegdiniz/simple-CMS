@@ -21,23 +21,21 @@ def index():
 #Galeria: Retorna conteudo
 @main_bps.route('/galerie/content/<foto_id>')
 def galerie_content(foto_id):
+    galerie_types = Gallerie_types.query.all()
     galeria = Galerie.query.filter(Galerie.id == foto_id).first()
-    return render_template('galerie_content.html', galeria=galeria)
-
-#Galeria: Retorna hub
-@main_bps.route('/galerie/hub')
-def galerie_hub():
-    galerie_db = Galerie.query.all()
-    destaque = Galerie.query.order_by(desc(Galerie.created_at)).first()
-    
-    return render_template('galerie_page.html', galerie_db=galerie_db, destaque=destaque)
-
+    return render_template('galerie_content.html', galeria=galeria, galerie_types=galerie_types)
 
 #Galeria: Retorna Page
+@main_bps.route('/galerie/page/<type_id>')
 @main_bps.route('/galerie/page')
-def galerie_page():
+def galerie_page(type_id=None):
     galerie_types = Gallerie_types.query.all()
-    galerie_db = Galerie.query.all()
+
+    if type_id:
+        galerie_db = Galerie.query.filter(Galerie.tipo == type_id).all()
+    else:
+        galerie_db = Galerie.query.all()
+
     home = Sobre.query.all()[0]
 
     return render_template('galerie_page.html', home=home, galerie_types=galerie_types, galerie_db=galerie_db)
@@ -45,27 +43,27 @@ def galerie_page():
 ##############################################################
 
 #Noticias: Retorna Page
+@main_bps.route('/noticias/page/<type_id>')
 @main_bps.route('/noticias/page')
-def noticias_page():
+def noticias_page(type_id = None):
     noticias_types = News_types.query.all()
-    noticias_db = News.query.all()
+    if type_id:
+        noticias_db = News.query.filter(News.tipo == type_id).all()
+    else:
+        noticias_db = News.query.all()
+
     home = Sobre.query.all()[0]
 
     return render_template('news_page.html', home=home, noticias_db=noticias_db, noticias_types=noticias_types)
 
-#Noticias: Retorna hub
-@main_bps.route('/noticias/hub/<type_id>')
-def noticias_hub(type_id):
-    noticias_db = News.query.filter(News.news_type_id == type_id).all()
-    destaque = News.query.filter(News.news_type_id == type_id).order_by(desc(News.created_at)).first()
-
-    return render_template('news_hub.html', noticias=noticias_db, destaque=destaque)
 
 #Noticias: Retorna conteudo
 @main_bps.route('/noticias/content/<news_id>')
 def noticias_content(news_id):
+    noticias_types = News_types.query.all()
     noticia = News.query.filter(News.id == news_id).first()
-    return render_template('news_content.html', noticia=noticia)
+
+    return render_template('news_content.html', noticia=noticia, noticias_types=noticias_types)
 
 #################################################################
 

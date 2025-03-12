@@ -1,8 +1,40 @@
-<div class="sobre_content" id="sobre_content">
-    <h2 class="text-center text-primary">
-        {{noticia.title}}
-    </h2>
-    <div class="text-center">
-        {{noticia.content | safe}}
+{% extends "base.html" %}
+{% block title %}{{ noticia.title }} - Notícias - Corporate CMS{% endblock %}
+
+{% block sidebar %}
+    <div class="col-md-3">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Tipos de Notícias</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for type in noticias_types %}
+                    <li class="list-group-item">
+                        <a href="{{ url_for('main_bps.noticias_page', type_id=type.id) }}" class="text-primary">{{ type.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
-</div>
+{% endblock %}
+
+{% block content_class %}col-md-9{% endblock %}
+{% block content %}
+    <section class="mb-5">
+        <h1 class="mb-4">{{ noticia.title }}</h1>
+        <div class="card shadow-lg">
+            <img src="{{ url_for('static', filename=noticia.path) }}" class="card-img-top" alt="{{ noticia.title }}" style="max-height: 600px; object-fit: cover;">
+            <div class="card-body">
+                <p class="text-muted mb-2">
+                    <i class="fas fa-calendar-alt me-2"></i>Publicado em: {{ noticia.created_at.strftime('%d/%m/%Y') }}
+                </p>
+                {% if noticia.content %}
+                    <div class="content mt-3">
+                        {{ noticia.content|safe }}
+                    </div>
+                {% endif %}
+                <a href="{{ url_for('main_bps.noticias_page') }}" class="btn btn-outline-primary mt-3">Voltar às Notícias</a>
+            </div>
+        </div>
+    </section>
+{% endblock %}

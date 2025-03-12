@@ -1,18 +1,99 @@
-{% extends 'base_page.html' %}
+{% extends "base.html" %}
+{% block title %}Notícias - Corporate CMS{% endblock %}
 
-{% block menu %}
-    {%for type in noticias_types%}
-    <a href="#{{type.name}}" class="navbar-link" id="{{type.name}}">{{type.name}}</a>
-    <script>
-        $("#{{type.name}}").click(() => {
-        fetch("{{url_for('main_bps.noticias_hub', type_id=type.id)}}").then()
-        .then(response => response.text())
-        .then(text => $("#hub").html(text))
-        })
-    </script>
-    {%endfor%}
+{% block sidebar %}
+    <div class="col-md-3">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Tipos de Notícias</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for type in noticias_types %}
+                    <li class="list-group-item">
+                        <a href="{{ url_for('main_bps.noticias_page', type_id=type.id) }}" class="text-primary">{{ type.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 {% endblock %}
 
+{% block content_class %}col-md-9{% endblock %}
 {% block content %}
-    
+    <h1 class="text-center mb-4">Notícias</h1>
+
+    <!-- Real-Time Search -->
+    <div class="mb-4">
+        <div class="input-group w-75 mx-auto">
+            <input type="text" id="newsSearch" class="form-control" placeholder="Pesquisar por título ou conteúdo..." aria-label="Search news">
+            <span class="input-group-text"><i class="fas fa-search"></i></span>
+        </div>
+    </div>
+
+    <!-- News Hub -->
+    <section class="mb-5" id="newsSection">
+        {% if noticias_db %}
+            <div class="row">
+                <!-- Featured News -->
+                <div class="col-md-8 mb-4">
+                    <div class="card shadow-lg">
+                        <img src="{{ url_for('static', filename=noticias_db[0].path) }}" class="card-img-top" alt="{{ noticias_db[0].title }}" style="height: 400px; object-fit: cover;">
+                        <div class="card-body">
+                            <h3 class="card-title">{{ noticias_db[0].title }}</h3>
+                            <p class="card-text">{{ noticias_db[0].content|truncate(200) }}</p>
+                            <a href="{{ url_for('main_bps.noticias_content', news_id=noticias_db[0].id) }}" class="btn btn-primary">Leia Mais</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Side News (First 2 Items) -->
+                <div class="col-md-4 mb-4">
+                    <div class="row">
+                        {% for noticia in noticias_db[1:3] %}
+                            <div class="col-12 mb-3">
+                                <div class="card shadow-sm">
+                                    <img src="{{ url_for('static', filename=noticia.path) }}" class="card-img-top" alt="{{ noticia.title }}" style="height: 150px; object-fit: cover;">
+                                    <div class="card-body">
+                                        <h6 class="card-title">{{ noticia.title }}</h6>
+                                        <p class="card-text d-none">{{ noticia.content }}</p>
+                                        <a href="{{ url_for('main_bps.noticias_content', news_id=noticia.id) }}" class="btn btn-outline-primary btn-sm">Leia Mais</a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <!-- Bottom News (Next 3 Items) -->
+            <div class="row">
+                {% for noticia in noticias_db[3:6] %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow-sm">
+                            <img src="{{ url_for('static', filename=noticia.path) }}" class="card-img-top" alt="{{ noticia.title }}" style="height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <h6 class="card-title">{{ noticia.title }}</h6>
+                                <p class="card-text d-none">{{ noticia.content }}</p>
+                                <a href="{{ url_for('main_bps.noticias_content', news_id=noticia.id) }}" class="btn btn-outline-primary btn-sm">Leia Mais</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-center">Nenhuma notícia encontrada.</p>
+        {% endif %}
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        document.getElementById('newsSearch').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            const cards = document.querySelectorAll('#newsSection .card');
+            cards.forEach(card => {
+                const title = card.querySelector('.card-title').textContent.toLowerCase();
+                const content = card.querySelector('.card-text').textContent.toLowerCase();
+                card.style.display = (title.includes(query) || content.includes(query)) ? '' : 'none';
+            });
+        });
+    </script>
 {% endblock %}

@@ -198,7 +198,6 @@ class Gallerie_types(db.Model):
 
 class Sobre(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    tipo = db.Column(db.String(100), nullable=False, unique=True)
 
     titulo = db.Column(db.String(255), nullable=True)
     
