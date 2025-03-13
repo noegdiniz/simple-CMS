@@ -204,7 +204,7 @@ class Sobre(db.Model):
     conteudo = db.Column(db.String, nullable=True)
     
     def __str__(self):
-        return self.name
+        return self.titulo
 
 # Delete hooks for models, delete files if models are getting deleted
 

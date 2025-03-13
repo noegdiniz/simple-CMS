@@ -32,7 +32,7 @@ def galerie_page(type_id=None):
     galerie_types = Gallerie_types.query.all()
 
     if type_id:
-        galerie_db = Galerie.query.filter(Galerie.tipo == type_id).all()
+        galerie_db = Galerie.query.filter(Galerie.gallerie_type_id == type_id).all()
     else:
         galerie_db = Galerie.query.all()
 
@@ -48,7 +48,7 @@ def galerie_page(type_id=None):
 def noticias_page(type_id = None):
     noticias_types = News_types.query.all()
     if type_id:
-        noticias_db = News.query.filter(News.tipo == type_id).all()
+        noticias_db = News.query.filter(News.news_type_id == type_id).all()
     else:
         noticias_db = News.query.all()
 
@@ -67,16 +67,10 @@ def noticias_content(news_id):
 
 #################################################################
 
-#Sobre: Retorna Page
-@main_bps.route('/sobre/content/sobre_type')
-def sobre_content(sobre_type):
-    sobre = Sobre.query.filter(Sobre.tipo == sobre_type).first()
-    return render_template('sobre_content.html', sobre=sobre)
-
 #Sobre: Retorna Hub
 @main_bps.route('/sobre/page')
 def sobre_page():
-    sobre_db = Sobre.query.all()
+    sobre_db = Sobre.query.all()[1:]
     home = Sobre.query.all()[0]
     return render_template('sobre_page.html', sobre_db=sobre_db, home=home)
 

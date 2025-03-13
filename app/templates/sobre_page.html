@@ -1,24 +1,37 @@
-{% extends 'base_page.html' %}
+{% extends "base.html" %}
+{% block title %}{{ sobre.titulo }} - Sobre - Corporate CMS{% endblock %}
 
-{% block menu %}
-    <a href="#historia" id="historia">Historia</a>
-    <a href="#ritos" id="ritos">Ritos</a>
-
-    <script>
-        $("#ritos").click(() => {
-        fetch({{url_for('main_bps.sobre_content', type_id="ritos")}}).then()
-        .then(response => response.text())
-        .then(text => $("#hub"))
-        })
-
-        $("#historia").click(() => {
-        fetch({{url_for('main_bps.sobre_content', type_id="historia")}}).then()
-        .then(response => response.text())
-        .then(text => $("#hub"))
-        })
-    </script>
+{% block sidebar %}
+    <div class="col-md-3">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Tipos de Sobre</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for item in sobre_db %}
+                    <li class="list-group-item">
+                        <a href="{{ url_for('main_bps.sobre_content', id=item.id) }}" class="text-primary">{{ item.titulo}}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 {% endblock %}
 
+{% block content_class %}col-md-9{% endblock %}
 {% block content %}
-
+    <section class="mb-5">
+        <h1 class="mb-4">{{ sobre.titulo }}</h1>
+        <div class="shadow-lg">
+            <div class="card-body">
+                {% if sobre.conteudo %}
+                    <div class="content mt-3">
+                        {{ sobre.conteudo|safe }}
+                    </div>
+                {% else %}
+                    <p class="text-muted">Nenhum conteúdo disponível para esta seção.</p>
+                {% endif %}
+            </div>
+        </div>
+    </section>
 {% endblock %}
