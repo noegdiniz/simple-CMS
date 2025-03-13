@@ -78,6 +78,10 @@
                     </div>
                 {% endfor %}
             </div>
+        {% else if not type_id%}
+        <div style="display: flex; height: 100%;">
+
+        </div>
         {% else %}
             <p class="text-center">Nenhuma notícia encontrada.</p>
         {% endif %}

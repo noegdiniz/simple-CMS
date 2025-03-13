@@ -30,10 +30,10 @@
         </div>
     </div>
 
-    {%if type_id != 1%}
+    {%if type_id != "1"%}
     <!-- Gallery Hub -->
     <section class="mb-5" id="gallerySection">
-        {% if galerie_db %}
+        {% if galerie_db and type_id%}
             <div class="row">
                 <!-- Featured Gallery Item -->
                 <div class="col-md-8 mb-4">
@@ -80,6 +80,10 @@
                     </div>
                 {% endfor %}
             </div>
+        {% else if not type_id %}
+        <div style="display: flex; height: 100%;">
+
+        </div>
         {% else %}
             <p class="text-center">Nenhuma foto encontrada.</p>
         {% endif %}

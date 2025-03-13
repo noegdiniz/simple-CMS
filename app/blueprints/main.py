@@ -38,7 +38,7 @@ def galerie_page(type_id=None):
 
     home = Sobre.query.all()[0]
 
-    return render_template('galerie_page.html', home=home,type_id=type_id, galerie_types=galerie_types, galerie_db=galerie_db)
+    return render_template('galerie_page.html', home=home, type_id=type_id, galerie_types=galerie_types, galerie_db=galerie_db)
 
 ##############################################################
 
@@ -54,7 +54,7 @@ def noticias_page(type_id = None):
 
     home = Sobre.query.all()[0]
 
-    return render_template('news_page.html', home=home, noticias_db=noticias_db, noticias_types=noticias_types)
+    return render_template('news_page.html', home=home, type_id=type_id, noticias_db=noticias_db, noticias_types=noticias_types)
 
 
 #Noticias: Retorna conteudo
