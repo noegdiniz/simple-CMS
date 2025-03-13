@@ -16,7 +16,7 @@ from wtforms import widgets
 from flask_admin.model import typefmt
 
 
-
+@login_required
 def date_format(view, value):
     return value.strftime('%d.%m.%Y %H:%M')
     
@@ -53,6 +53,7 @@ class RootModelView(ModelView):
         'url': _user_formatter
     }
 
+
     def _handle_view(self, name, **kwargs):
         """
         Override builtin _handle_view in order to redirect users when a view is not
@@ -65,7 +66,8 @@ class RootModelView(ModelView):
             else:
                 # login
                 return redirect(url_for("security.login", next=request.url))
-    
+        return super()._handle_view(name, **kwargs)
+        
 class AdminIndexView(AdminIndexView):
     @expose('/')
     @login_required

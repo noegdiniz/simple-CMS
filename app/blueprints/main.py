@@ -38,7 +38,7 @@ def galerie_page(type_id=None):
 
     home = Sobre.query.all()[0]
 
-    return render_template('galerie_page.html', home=home, galerie_types=galerie_types, galerie_db=galerie_db)
+    return render_template('galerie_page.html', home=home,type_id=type_id, galerie_types=galerie_types, galerie_db=galerie_db)
 
 ##############################################################
 

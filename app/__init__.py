@@ -18,7 +18,6 @@ def create_app():
     main.configure(app)
     mail.configure(app)
     login.configure(app, user_datastore)
-    user_datastore.configure(app)
 
     admin.configure(app)
     
