@@ -6,7 +6,7 @@
     <div class="col-md-3">
         <div class="card shadow-sm mb-4">
             <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Tipos de Galeria</h5>
+                <h5 class="mb-0">Menu Galeria</h5>
             </div>
             <ul class="list-group list-group-flush">
                 {% for type in galerie_types %}
@@ -98,7 +98,7 @@
                     {% for galeria in galerie_db %}
                         <div class="col-md-3 mb-3">
                             <div class="card shadow-sm">
-                                <div class="card-body" style="padding: 5px;">
+                                <div class="card-body" style="padding: 3px;">
                                     <p class="card-title">{{ galeria.title.split("|")[0] }}</p>
                                     <p style="font-size: small; color: grey;">{{ galeria.title.split("|")[1] }}</p>
                                 </div>
