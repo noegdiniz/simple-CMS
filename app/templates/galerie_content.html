@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 
+{% block title %}
 {% if galeria %}
-    {% block title %} {{ galeria.title }} - {{ titulo_padrao }}{% endblock %}
-{%%else}
-    {% block title %}{{ titulo_padrao }}{% endblock %}
+    {{ galeria.title }} - {{ titulo_padrao }}
+{%else%}
+    {{ titulo_padrao }}
 {%endif%}
-
+{% endblock %}
 
 {% block sidebar %}
     <div class="col-md-3">

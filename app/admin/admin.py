@@ -222,8 +222,8 @@ class DocsAdmin(RootModelView):
         super().on_model_change(form, model, is_created)
         
 class DocsTypesAdmin(RootModelView):
-    form_columns = ['name', 'description']
-
+    form_columns = ['name', 'description', 'publico']
+    
     def is_accessible(self):
         return current_user.is_authenticated and current_user.has_permission('can_view_docs_types')
     
@@ -237,7 +237,7 @@ class DocsTypesAdmin(RootModelView):
         return current_user.has_permission('can_delete_docs_types')
 
 class GallerieTypesAdmin(RootModelView):
-    form_columns = ['name', 'description']
+    form_columns = ['name', 'description', 'publico']
 
     def is_accessible(self):
         return current_user.is_authenticated and current_user.has_permission('can_view_gallerie_types')
@@ -252,7 +252,7 @@ class GallerieTypesAdmin(RootModelView):
         return current_user.has_permission('can_delete_gallerie_types')
 
 class NewsTypesAdmin(RootModelView):
-    form_columns = ['name', 'description']
+    form_columns = ['name', 'description', 'publico']
 
     def is_accessible(self):
         return current_user.is_authenticated and current_user.has_permission('can_view_news_types')
