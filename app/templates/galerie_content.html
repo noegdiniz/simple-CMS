@@ -1,5 +1,11 @@
 {% extends "base.html" %}
-{% block title %}{{ galeria.title }} - Galeria - Corporate CMS{% endblock %}
+
+{% if galeria %}
+    {% block title %} {{ galeria.title }} - {{ titulo_padrao }}{% endblock %}
+{%%else}
+    {% block title %}{{ titulo_padrao }}{% endblock %}
+{%endif%}
+
 
 {% block sidebar %}
     <div class="col-md-3">

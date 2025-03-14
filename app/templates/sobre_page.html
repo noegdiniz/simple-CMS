@@ -1,16 +1,21 @@
 {% extends "base.html" %}
-{% block title %}{{ sobre.titulo }} - Sobre - Corporate CMS{% endblock %}
+
+{% if sobre%}
+    {% block title %} {{ sobre.titulo }} - {{ sobre_db[1].titulo }}{% endblock %}
+{%%else}
+    {% block title %}{{ sobre_db[1].titulo }}{% endblock %}
+{%endif%}
 
 {% block sidebar %}
     <div class="col-md-3">
         <div class="card shadow-sm mb-4">
             <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Tipos de Sobre</h5>
+                <h5 class="mb-0">Menu Sobre</h5>
             </div>
             <ul class="list-group list-group-flush">
-                {% for item in sobre_db %}
+                {% for item in sobre_db[1:] %}
                     <li class="list-group-item">
-                        <a href="{{ url_for('main_bps.sobre_content', id=item.id) }}" class="text-primary">{{ item.titulo}}</a>
+                        <a href="{{ url_for('main_bps.sobre_page', id=item.id) }}" class="text-primary">{{ item.titulo}}</a>
                     </li>
                 {% endfor %}
             </ul>
@@ -24,7 +29,7 @@
         <h1 class="mb-4">{{ sobre.titulo }}</h1>
         <div class="shadow-lg">
             <div class="card-body">
-                {% if sobre.conteudo %}
+                {% if sobre %}
                     <div class="content mt-3">
                         {{ sobre.conteudo|safe }}
                     </div>

@@ -1,5 +1,11 @@
 {% extends "base.html" %}
-{% block title %}{{ noticia.title }} - Notícias - Corporate CMS{% endblock %}
+
+{% if noticia %}
+    {% block title %} {{ noticia.title }} - {{ titulo_padrao }}{% endblock %}
+{%%else}
+    {% block title %}{{ titulo_padrao }}{% endblock %}
+{%endif%}
+
 
 {% block sidebar %}
     <div class="col-md-3">
