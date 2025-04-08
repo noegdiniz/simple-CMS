@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+{% block title %}Documentos - {{ titulo_padrao }}{% endblock %}
+
+{% block sidebar %}
+    <div class="col-md-3">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Menu Documentos</h5>
+            </div>
+            <ul class="list-group list-group-flush">
+                {% for type in docs_types %}
+                    <li class="list-group-item">
+                        <a href="{{ url_for('main_bps.docs_page', type_id=type.id) }}" class="text-primary {% if type_id == type.id|string %}fw-bold{% endif %}">
+                            {{ type.name }}
+                        </a>
+                    </li>
+                {% endfor %}
+                {% if not type_id %}
+                <div>
+                    
+                </div>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content_class %}col-md-9{% endblock %}
+{% block content %}
+    <h1 class="text-center mb-5">Documentos</h1>
+
+    <section class="mb-5" id="docsSection">
+        {% if docs_db %}
+            <div class="row" id="docsList">
+                {% for doc in docs_db %}
+                    <div class="col-md-4 mb-4 doc-item">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <h6 class="card-title">{{ doc.title }}</h6>
+                                <p class="text-muted mb-2">
+                                    <i class="fas fa-calendar-alt me-2"></i>{{ doc.created_at.strftime('%d/%m/%Y') }}
+                                </p>
+                                <p class="card-text">{{ doc.doc_type.name }}</p>
+                                <a href="{{ url_for('static', filename=doc.path) }}" class="btn btn-outline-primary btn-sm" target="_blank">Baixar</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <!-- Pagination Controls -->
+            <nav aria-label="Documentos Pagination" class="mt-4">
+                <ul class="pagination justify-content-center" id="pagination">
+                    <!-- Pagination buttons will be dynamically added by JS -->
+                </ul>
+            </nav>
+        {% else %}
+            <p class="text-center">Nenhum documento disponível no momento.</p>
+        {% endif %}
+    </section>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const docsList = document.getElementById('docsList');
+            const docItems = document.querySelectorAll('.doc-item');
+            const itemsPerPage = 6; // Number of items per page
+            const totalItems = docItems.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            let currentPage = 1;
+
+            function showPage(page) {
+                const start = (page - 1) * itemsPerPage;
+                const end = start + itemsPerPage;
+
+                docItems.forEach((item, index) => {
+                    item.style.display = (index >= start && index < end) ? 'block' : 'none';
+                });
+
+                updatePagination(page);
+            }
+
+            function updatePagination(page) {
+                const pagination = document.getElementById('pagination');
+                pagination.innerHTML = '';
+
+                // Previous Button
+                const prevLi = document.createElement('li');
+                prevLi.className = `page-item ${page === 1 ? 'disabled' : ''}`;
+                const prevLink = document.createElement('a');
+                prevLink.className = 'page-link';
+                prevLink.href = '#';
+                prevLink.textContent = 'Anterior';
+                prevLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (page > 1) showPage(page - 1);
+                });
+                prevLi.appendChild(prevLink);
+                pagination.appendChild(prevLi);
+
+                // Page Numbers
+                for (let i = 1; i <= totalPages; i++) {
+                    const li = document.createElement('li');
+                    li.className = `page-item ${i === page ? 'active' : ''}`;
+                    const link = document.createElement('a');
+                    link.className = 'page-link';
+                    link.href = '#';
+                    link.textContent = i;
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        showPage(i);
+                    });
+                    li.appendChild(link);
+                    pagination.appendChild(li);
+                }
+
+                // Next Button
+                const nextLi = document.createElement('li');
+                nextLi.className = `page-item ${page === totalPages ? 'disabled' : ''}`;
+                const nextLink = document.createElement('a');
+                nextLink.className = 'page-link';
+                nextLink.href = '#';
+                nextLink.textContent = 'Próximo';
+                nextLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (page < totalPages) showPage(page + 1);
+                });
+                nextLi.appendChild(nextLink);
+                pagination.appendChild(nextLi);
+            }
+
+            // Initialize first page
+            if (totalItems > 0) {
+                showPage(1);
+            }
+        });
+    </script>
+{% endblock %}

@@ -1,6 +1,5 @@
 {% extends "base.html" %}
-
-{% block title %} Notícias - {{ titulo_padrao }}{% endblock %}
+{% block title %}Notícias - {{ titulo_padrao }}{% endblock %}
 
 {% block sidebar %}
     <div class="col-md-3">
@@ -33,29 +32,30 @@
 
     <!-- News Hub -->
     <section class="mb-5" id="newsSection">
-        {% if noticias_db %}
-            <div class="row">
-                <!-- Featured News -->
-                <div class="col-md-8 mb-4">
+        {% if noticias_db and type_id %}
+            <div class="row" id="newsList">
+                <!-- Featured News (First Item) -->
+                <div class="col-md-8 mb-4 news-item">
                     <div class="card shadow-lg">
                         <img src="{{ url_for('static', filename=noticias_db[0].path) }}" class="card-img-top" alt="{{ noticias_db[0].title }}" style="height: 400px; object-fit: cover;">
                         <div class="card-body">
                             <h3 class="card-title">{{ noticias_db[0].title }}</h3>
-                            <p class="card-text">{{ noticias_db[0].content|truncate(200) }}</p>
+                            <p class="card-text">{{ noticias_db[0].content|truncate(200)|safe }}</p>
+                            <p class="card-text d-none">{{ noticias_db[0].content }}</p>
                             <a href="{{ url_for('main_bps.noticias_content', news_id=noticias_db[0].id) }}" class="btn btn-primary">Leia Mais</a>
                         </div>
                     </div>
                 </div>
-                <!-- Side News (First 2 Items) -->
+                <!-- Side News (Next 2 Items) -->
                 <div class="col-md-4 mb-4">
                     <div class="row">
                         {% for noticia in noticias_db[1:3] %}
-                            <div class="col-12 mb-3">
+                            <div class="col-12 mb-3 news-item">
                                 <div class="card shadow-sm">
                                     <img src="{{ url_for('static', filename=noticia.path) }}" class="card-img-top" alt="{{ noticia.title }}" style="height: 150px; object-fit: cover;">
                                     <div class="card-body">
                                         <h6 class="card-title">{{ noticia.title }}</h6>
-                                        <p class="card-text d-none">{{ noticia.content }}</p>
+                                        <p class="card-text d-none">{{ noticia.content|safe }}</p>
                                         <a href="{{ url_for('main_bps.noticias_content', news_id=noticia.id) }}" class="btn btn-outline-primary btn-sm">Leia Mais</a>
                                     </div>
                                 </div>
@@ -64,25 +64,29 @@
                     </div>
                 </div>
             </div>
-            <!-- Bottom News (Next 3 Items) -->
-            <div class="row">
-                {% for noticia in noticias_db[3:6] %}
-                    <div class="col-md-4 mb-4">
+            <!-- Bottom News (Paginated) -->
+            <div class="row" id="bottomNewsList">
+                {% for noticia in noticias_db[3:] %}
+                    <div class="col-md-4 mb-4 news-item">
                         <div class="card shadow-sm">
                             <img src="{{ url_for('static', filename=noticia.path) }}" class="card-img-top" alt="{{ noticia.title }}" style="height: 200px; object-fit: cover;">
                             <div class="card-body">
                                 <h6 class="card-title">{{ noticia.title }}</h6>
-                                <p class="card-text d-none">{{ noticia.content }}</p>
+                                <p class="card-text d-none">{{ noticia.content|safe }}</p>
                                 <a href="{{ url_for('main_bps.noticias_content', news_id=noticia.id) }}" class="btn btn-outline-primary btn-sm">Leia Mais</a>
                             </div>
                         </div>
                     </div>
                 {% endfor %}
             </div>
-        {% elif not type_id%}
-        <div style="display: flex; height: 100%;">
-
-        </div>
+            <!-- Pagination Controls -->
+            <nav aria-label="News Pagination" class="mt-4">
+                <ul class="pagination justify-content-center" id="pagination">
+                    <!-- Pagination buttons will be dynamically added by JS -->
+                </ul>
+            </nav>
+        {% elif not type_id %}
+            <div style="display: flex; height: 100%;"></div>
         {% else %}
             <p class="text-center">Nenhuma notícia encontrada.</p>
         {% endif %}
@@ -91,14 +95,113 @@
 
 {% block scripts %}
     <script>
-        document.getElementById('newsSearch').addEventListener('input', function() {
-            const query = this.value.toLowerCase();
-            const cards = document.querySelectorAll('#newsSection .card');
-            cards.forEach(card => {
-                const title = card.querySelector('.card-title').textContent.toLowerCase();
-                const content = card.querySelector('.card-text').textContent.toLowerCase();
-                card.style.display = (title.includes(query) || content.includes(query)) ? '' : 'none';
+        document.addEventListener('DOMContentLoaded', function () {
+            const bottomNewsList = document.getElementById('bottomNewsList');
+            const newsItems = document.querySelectorAll('#bottomNewsList .news-item');
+            const allNewsItems = document.querySelectorAll('.news-item'); // For search
+            const searchInput = document.getElementById('newsSearch');
+            const itemsPerPage = 3; // 3 items per page for bottom section
+            let currentPage = 1;
+            let filteredBottomItems = Array.from(newsItems);
+            let filteredAllItems = Array.from(allNewsItems);
+
+            function showPage(page, items) {
+                const start = (page - 1) * itemsPerPage;
+                const end = start + itemsPerPage;
+
+                items.forEach((item, index) => {
+                    item.style.display = (index >= start && index < end) ? 'block' : 'none';
+                });
+
+                updatePagination(page, items.length);
+            }
+
+            function updatePagination(page, totalItems) {
+                const totalPages = Math.ceil(totalItems / itemsPerPage);
+                const pagination = document.getElementById('pagination');
+                pagination.innerHTML = '';
+
+                // Previous Button
+                const prevLi = document.createElement('li');
+                prevLi.className = `page-item ${page === 1 ? 'disabled' : ''}`;
+                const prevLink = document.createElement('a');
+                prevLink.className = 'page-link';
+                prevLink.href = '#';
+                prevLink.textContent = 'Anterior';
+                prevLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (page > 1) showPage(page - 1, filteredBottomItems);
+                });
+                prevLi.appendChild(prevLink);
+                pagination.appendChild(prevLi);
+
+                // Page Numbers
+                for (let i = 1; i <= totalPages; i++) {
+                    const li = document.createElement('li');
+                    li.className = `page-item ${i === page ? 'active' : ''}`;
+                    const link = document.createElement('a');
+                    link.className = 'page-link';
+                    link.href = '#';
+                    link.textContent = i;
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        showPage(i, filteredBottomItems);
+                    });
+                    li.appendChild(link);
+                    pagination.appendChild(li);
+                }
+
+                // Next Button
+                const nextLi = document.createElement('li');
+                nextLi.className = `page-item ${page === totalPages ? 'disabled' : ''}`;
+                const nextLink = document.createElement('a');
+                nextLink.className = 'page-link';
+                nextLink.href = '#';
+                nextLink.textContent = 'Próximo';
+                nextLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (page < totalPages) showPage(page + 1, filteredBottomItems);
+                });
+                nextLi.appendChild(nextLink);
+                pagination.appendChild(nextLi);
+            }
+
+            // Real-Time Search
+            searchInput.addEventListener('input', function () {
+                const query = this.value.toLowerCase();
+
+                // Filter all items (including featured and side)
+                filteredAllItems = Array.from(allNewsItems).filter(item => {
+                    const title = item.querySelector('.card-title').textContent.toLowerCase();
+                    const content = item.querySelector('.card-text.d-none').textContent.toLowerCase();
+                    return title.includes(query) || content.includes(query);
+                });
+
+                // Filter bottom items separately for pagination
+                filteredBottomItems = Array.from(newsItems).filter(item => {
+                    const title = item.querySelector('.card-title').textContent.toLowerCase();
+                    const content = item.querySelector('.card-text.d-none').textContent.toLowerCase();
+                    return title.includes(query) || content.includes(query);
+                });
+
+                // Show all filtered items initially, then paginate bottom
+                filteredAllItems.forEach(item => {
+                    item.style.display = 'block'; // Show all matching items
+                });
+                allNewsItems.forEach(item => {
+                    if (!filteredAllItems.includes(item)) {
+                        item.style.display = 'none'; // Hide non-matching items
+                    }
+                });
+
+                currentPage = 1; // Reset to first page on search
+                showPage(currentPage, filteredBottomItems);
             });
+
+            // Initialize first page for bottom news
+            if (newsItems.length > 0) {
+                showPage(1, filteredBottomItems);
+            }
         });
     </script>
 {% endblock %}

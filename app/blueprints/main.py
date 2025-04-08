@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, abort
-from app.models.models import Sobre, Galerie, News, Docs, Gallerie_types, News_types
+from app.models.models import Docs_types, Sobre, Galerie, News, Docs, Gallerie_types, News_types
 from sqlalchemy import desc
 
 main_bps = Blueprint('main_bps', __name__)
@@ -21,7 +21,7 @@ def index():
 #Galeria: Retorna conteudo
 @main_bps.route('/galerie/content/<foto_id>')
 def galerie_content(foto_id):
-    galerie_types = Gallerie_types.query.all()
+    galerie_types = Gallerie_types.query.filter(Gallerie_types.publico == True).all()
     galeria = Galerie.query.filter(Galerie.id == foto_id).join(Gallerie_types).filter(Gallerie_types.publico == True).first()
     if not galeria:
         abort(404)
@@ -33,7 +33,7 @@ def galerie_content(foto_id):
 @main_bps.route('/galerie/page/<type_id>')
 @main_bps.route('/galerie/page')
 def galerie_page(type_id=None):
-    galerie_types = Gallerie_types.query.all()
+    galerie_types = Gallerie_types.query.filter(Gallerie_types.publico == True).all()
 
     if type_id:
         galerie_db = Galerie.query.filter(Galerie.gallerie_type_id == type_id).join(Gallerie_types).filter(Gallerie_types.publico == True).all()
@@ -49,9 +49,10 @@ def galerie_page(type_id=None):
 @main_bps.route('/noticias/page/<type_id>')
 @main_bps.route('/noticias/page')
 def noticias_page(type_id=None):
-    noticias_types = News_types.query.all()
+    noticias_types = News_types.query.filter(News_types.publico == True).all()
+
     if type_id:
-        noticias_db = News.query.filter(News.news_type_id == type_id).all()
+        noticias_db = News.query.filter(News.news_type_id == type_id).join(News_types).filter(News_types.publico == True).all()
     else:
         noticias_db = News.query.join(News_types).filter(News_types.publico == True).all()
 
@@ -62,7 +63,7 @@ def noticias_page(type_id=None):
 #Noticias: Retorna conteudo
 @main_bps.route('/noticias/content/<news_id>')
 def noticias_content(news_id):
-    noticias_types = News_types.query.all()
+    noticias_types = News_types.query.filter(News_types.publico == True).all()
     noticia = News.query.filter(News.id == news_id).join(News_types).filter(News_types.publico == True).first()
     if not noticia:
         abort(404)
@@ -84,9 +85,25 @@ def sobre_page(id=None):
             abort(404)
     else:
         sobre = None
-
+    
     return render_template('sobre_page.html', sobre_db=sobre_db, sobre=sobre)
 
 ################################################################
+#Pagina de Documentos
+@main_bps.route('/docs/page/<type_id>')
+@main_bps.route('/docs/page')
+def docs_page(type_id=None):
+    docs_types = Docs_types.query.filter(Docs_types.publico == True).all()
+
+    if type_id:
+        docs_db = Docs.query.filter(Docs.docs_type_id == type_id).join(Docs_types).filter(Docs_types.publico == True).all()
+    else:
+        docs_db = Docs.query.join(Docs_types).filter(Docs_types.publico == True).all()
+
+    titulo_padrao = Sobre.query.offset(1).first()
+
+    return render_template('docs_page.html', docs_db=docs_db, docs_types=docs_types, type_id=type_id, titulo_padrao=titulo_padrao)
+
+
 def configure(app):
     app.register_blueprint(main_bps)

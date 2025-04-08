@@ -24,6 +24,8 @@
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('main_bps.noticias_page') }}">Notícias</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('main_bps.galerie_page') }}">Galeria</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('main_bps.sobre_page') }}">Sobre</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('main_bps.docs_page') }}">Documentos<a></li>
+</a>
                     {% if current_user.is_authenticated %}
                         <li class="nav-item"><a class="nav-link" href="{{ url_for('admin.index') }}">Admin</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ url_for('security.logout') }}">Sair</a></li>

@@ -1,6 +1,5 @@
 {% extends "base.html" %}
-
-{% block title %} Galeria - {{ titulo_padrao }}{% endblock %}
+{% block title %}Galeria - {{ titulo_padrao }}{% endblock %}
 
 {% block sidebar %}
     <div class="col-md-3">
@@ -31,99 +30,189 @@
         </div>
     </div>
 
-    {%if type_id != "1"%}
-    <!-- Gallery Hub -->
+    <!-- Gallery Section -->
     <section class="mb-5" id="gallerySection">
-        {% if galerie_db and type_id%}
-            <div class="row">
-                <!-- Featured Gallery Item -->
-                <div class="col-md-8 mb-4">
-                    <div class="card shadow-lg">
-                        <img src="{{ url_for('static', filename=galerie_db[0].path) }}" class="card-img-top" alt="{{ galerie_db[0].title }}" style="height: 400px; object-fit: cover;">
-                        <div class="card-body">
-                            <h3 class="card-title">{{ galerie_db[0].title }}</h3>
-                            <p class="card-text">{{ galerie_db[0].description|truncate(200) }}</p>
-                            <p class="card-text d-none">{{ galerie_db[0].created_at.strftime('%d/%m/%Y') }}</p>
-                            <a href="{{ url_for('main_bps.galerie_content', foto_id=galerie_db[0].id) }}" class="btn btn-primary">Ver Mais</a>
+        {% if galerie_db and type_id %}
+            {% if type_id != "1" %}
+                <!-- Hub Layout for type_id != "1" -->
+                <div class="row" id="staticGallery">
+                    <!-- Featured Gallery Item -->
+                    <div class="col-md-8 mb-4 static-item">
+                        <div class="card shadow-lg">
+                            <img src="{{ url_for('static', filename=galerie_db[0].path) }}" class="card-img-top" alt="{{ galerie_db[0].title }}" style="height: 400px; object-fit: cover;">
+                            <div class="card-body">
+                                <h3 class="card-title">{{ galerie_db[0].title }}</h3>
+                                <p class="card-text">{{ galerie_db[0].description|truncate(200)|safe }}</p>
+                                <p class="card-text d-none">{{ galerie_db[0].created_at.strftime('%d/%m/%Y') }}</p>
+                                <a href="{{ url_for('main_bps.galerie_content', foto_id=galerie_db[0].id) }}" class="btn btn-primary">Ver Mais</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!-- Side Gallery Items (First 2 Items) -->
-                <div class="col-md-4 mb-4">
-                    <div class="row">
-                        {% for galeria in galerie_db[1:3] %}
-                            <div class="col-12 mb-3">
-                                <div class="card shadow-sm">
-                                    <img src="{{ url_for('static', filename=galeria.path) }}" class="card-img-top" alt="{{ galeria.title }}" style="height: 150px; object-fit: cover;">
-                                    <div class="card-body">
-                                        <h6 class="card-title">{{ galeria.title }}</h6>
-                                        <p class="card-text d-none">{{ galeria.created_at.strftime('%d/%m/%Y') }}</p>
-                                        <a href="{{ url_for('main_bps.galerie_content', foto_id=galeria.id) }}" class="btn btn-outline-primary btn-sm">Ver Mais</a>
+                    <!-- Side Gallery Items (First 2 Items) -->
+                    <div class="col-md-4 mb-4">
+                        <div class="row">
+                            {% for galeria in galerie_db[1:3] %}
+                                <div class="col-12 mb-3 static-item">
+                                    <div class="card shadow-sm">
+                                        <img src="{{ url_for('static', filename=galeria.path) }}" class="card-img-top" alt="{{ galeria.title }}" style="height: 150px; object-fit: cover;">
+                                        <div class="card-body">
+                                            <h6 class="card-title">{{ galeria.title }}</h6>
+                                            <p class="card-text d-none">{{ galeria.created_at.strftime('%d/%m/%Y') }}</p>
+                                            <a href="{{ url_for('main_bps.galerie_content', foto_id=galeria.id) }}" class="btn btn-outline-primary btn-sm">Ver Mais</a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-            <!-- Bottom Gallery Items (Next 3 Items) -->
-            <div class="row">
-                {% for galeria in galerie_db[3:6] %}
-                    <div class="col-md-4 mb-4">
-                        <div class="card shadow-sm">
-                            <img src="{{ url_for('static', filename=galeria.path) }}" class="card-img-top" alt="{{ galeria.title }}" style="height: 200px; object-fit: cover;">
-                            <div class="card-body">
-                                <h6 class="card-title">{{ galeria.title }}</h6>
-                                <p class="card-text d-none">{{ galeria.created_at.strftime('%d/%m/%Y') }}</p>
-                                <a href="{{ url_for('main_bps.galerie_content', foto_id=galeria.id) }}" class="btn btn-outline-primary btn-sm">Ver Mais</a>
-                            </div>
+                            {% endfor %}
                         </div>
                     </div>
-                {% endfor %}
-            </div>
-        {% elif not type_id %}
-        <div style="display: flex; height: 100%;">
-
-        </div>
-        {% else %}
-            <p class="text-center">Nenhuma foto encontrada.</p>
-        {% endif %}
-    </section>
-
-    {% else %}
-        <!-- Gallery Hub -->
-        <section class="mb-5" id="gallerySection">
-            {% if galerie_db %}
-                <div class="row">
+                </div>
+                <!-- Bottom Gallery Items with Pagination -->
+                <div class="row" id="galleryList">
+                    {% for galeria in galerie_db[3:] %}
+                        <div class="col-md-4 mb-4 gallery-item">
+                            <div class="card shadow-sm">
+                                <img src="{{ url_for('static', filename=galeria.path) }}" class="card-img-top" alt="{{ galeria.title }}" style="height: 200px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h6 class="card-title">{{ galeria.title }}</h6>
+                                    <p class="card-text d-none">{{ galeria.created_at.strftime('%d/%m/%Y') }}</p>
+                                    {% if galeria.description %}
+                                        <p class="card-text">{{ galeria.description|truncate(100)|safe }}</p>
+                                    {% endif %}
+                                    <a href="{{ url_for('main_bps.galerie_content', foto_id=galeria.id) }}" class="btn btn-outline-primary btn-sm">Ver Mais</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <!-- Grid Layout for type_id == "1" -->
+                <div class="row" id="galleryList">
                     {% for galeria in galerie_db %}
-                        <div class="col-md-3 mb-3">
+                        <div class="col-md-3 mb-3 gallery-item">
                             <div class="card shadow-sm">
                                 <div class="card-body" style="padding: 3px;">
                                     <p class="card-title">{{ galeria.title.split("|")[0] }}</p>
                                     <p style="font-size: small; color: grey;">{{ galeria.title.split("|")[1] }}</p>
+                                    <p class="card-text d-none">{{ galeria.created_at.strftime('%d/%m/%Y') }}</p>
                                 </div>
                                 <img src="{{ url_for('static', filename=galeria.path) }}" class="card-img-top" alt="{{ galeria.title }}" style="height: 200px; object-fit: cover;">
                             </div>
                         </div>
                     {% endfor %}
                 </div>
-            {% else %}
-                <p class="text-center">Nenhuma foto encontrada.</p>
             {% endif %}
-        </section>
-    {%endif%}
+            <!-- Pagination Controls -->
+            <nav aria-label="Gallery Pagination" class="mt-4">
+                <ul class="pagination justify-content-center" id="pagination">
+                    <!-- Pagination buttons will be dynamically added by JS -->
+                </ul>
+            </nav>
+        {% elif not type_id %}
+            <div style="display: flex; height: 100%;"></div>
+        {% else %}
+            <p class="text-center">Nenhuma foto encontrada.</p>
+        {% endif %}
+    </section>
 {% endblock %}
 
 {% block scripts %}
     <script>
-        document.getElementById('gallerySearch').addEventListener('input', function() {
-            const query = this.value.toLowerCase();
-            const cards = document.querySelectorAll('#gallerySection .card');
-            cards.forEach(card => {
-                const title = card.querySelector('.card-title').textContent.toLowerCase();
-                const date = card.querySelector('.card-text.d-none').textContent.toLowerCase();
-                card.style.display = (title.includes(query) || date.includes(query)) ? '' : 'none';
+        document.addEventListener('DOMContentLoaded', function () {
+            const galleryList = document.getElementById('galleryList');
+            const galleryItems = document.querySelectorAll('.gallery-item'); // Paginated items
+            const staticItems = document.querySelectorAll('.static-item'); // Featured and side items
+            const searchInput = document.getElementById('gallerySearch');
+            const itemsPerPage = {% if type_id != "1" %}3{% else %}8{% endif %}; // 3 for bottom items when type_id != "1", 8 for type_id == "1"
+            let currentPage = 1;
+            let filteredItems = Array.from(galleryItems);
+
+            function showPage(page, items) {
+                const start = (page - 1) * itemsPerPage;
+                const end = start + itemsPerPage;
+
+                items.forEach((item, index) => {
+                    item.style.display = (index >= start && index < end) ? 'block' : 'none';
+                });
+
+                updatePagination(page, items.length);
+            }
+
+            function updatePagination(page, totalItems) {
+                const totalPages = Math.ceil(totalItems / itemsPerPage);
+                const pagination = document.getElementById('pagination');
+                pagination.innerHTML = '';
+
+                // Previous Button
+                const prevLi = document.createElement('li');
+                prevLi.className = `page-item ${page === 1 ? 'disabled' : ''}`;
+                const prevLink = document.createElement('a');
+                prevLink.className = 'page-link';
+                prevLink.href = '#';
+                prevLink.textContent = 'Anterior';
+                prevLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (page > 1) showPage(page - 1, filteredItems);
+                });
+                prevLi.appendChild(prevLink);
+                pagination.appendChild(prevLi);
+
+                // Page Numbers
+                for (let i = 1; i <= totalPages; i++) {
+                    const li = document.createElement('li');
+                    li.className = `page-item ${i === page ? 'active' : ''}`;
+                    const link = document.createElement('a');
+                    link.className = 'page-link';
+                    link.href = '#';
+                    link.textContent = i;
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        showPage(i, filteredItems);
+                    });
+                    li.appendChild(link);
+                    pagination.appendChild(li);
+                }
+
+                // Next Button
+                const nextLi = document.createElement('li');
+                nextLi.className = `page-item ${page === totalPages ? 'disabled' : ''}`;
+                const nextLink = document.createElement('a');
+                nextLink.className = 'page-link';
+                nextLink.href = '#';
+                nextLink.textContent = 'Próximo';
+                nextLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (page < totalPages) showPage(page + 1, filteredItems);
+                });
+                nextLi.appendChild(nextLink);
+                pagination.appendChild(nextLi);
+            }
+
+            // Real-Time Search
+            searchInput.addEventListener('input', function () {
+                const query = this.value.toLowerCase();
+
+                // Filter static items (featured and side)
+                staticItems.forEach(item => {
+                    const title = item.querySelector('.card-title').textContent.toLowerCase();
+                    const date = item.querySelector('.card-text.d-none') ? item.querySelector('.card-text.d-none').textContent.toLowerCase() : '';
+                    item.style.display = (title.includes(query) || date.includes(query)) ? 'block' : 'none';
+                });
+
+                // Filter paginated items
+                filteredItems = Array.from(galleryItems).filter(item => {
+                    const title = item.querySelector('.card-title').textContent.toLowerCase();
+                    const date = item.querySelector('.card-text.d-none') ? item.querySelector('.card-text.d-none').textContent.toLowerCase() : '';
+                    return title.includes(query) || date.includes(query);
+                });
+
+                currentPage = 1; // Reset to first page on search
+                showPage(currentPage, filteredItems);
             });
+
+            // Initialize first page
+            if (galleryItems.length > 0) {
+                showPage(1, filteredItems);
+            }
         });
     </script>
-{% endblock %}
+{% endblock %}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
